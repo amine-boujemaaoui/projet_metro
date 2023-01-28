@@ -39,8 +39,8 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
 {
     FILE *fichierStations = fopen(nomFichierStations, "r");
     FILE *fichierAretes = fopen(nomFichierAretes, "r");
-    char *tmpChar;
-    int tmpInt;
+    char tmpChar[50] = "";
+    int tmpInt, tmpInt2;
     if (fichierStations == NULL)
     {
         printf("Impossible d'ouvrir le fichier %s\n", nomFichierStations);
@@ -54,27 +54,30 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
 
     // On compte le nombre de station dans le fichier nomFichierAretes
     int nbStations = 0;
-    while (fscanf(fichierStations, "%[^,],%d\n", tmpChar, ) != EOF)
-    {
+    fscanf(fichierStations, "%[^,],%[^\n]", tmpChar, tmpChar);
+    while (fscanf(fichierStations, "%[^,],%d\n", tmpChar, &tmpInt) != EOF)
         nbStations++;
-        printf("%d\n", nbStations);
-    }
     nbStations--; // On ne compte pas la premier ligne du fichier qui est l'entete
-    rewind(fichierStations);
+    //rewind(fichierStations);
 
     // On compte le nombre d'arrete dans le fichier nomFichierAretes
     int nbAretes = 0;
-    while (fscanf(fichierAretes, "\n") != EOF)
+    fscanf(fichierAretes, "%[^,],%[^,],%[^\n]", tmpChar, tmpChar, tmpChar);
+    while (fscanf(fichierAretes, "%d,%d,%[^\n]", &tmpInt, &tmpInt2, tmpChar) != EOF)
         nbAretes++;
     nbAretes--; // On ne compte pas la premier ligne du fichier qui est l'entete
-    rewind(fichierAretes);
+    //rewind(fichierAretes);
 
     Graphe *graphe = new_graphe(nbStations, nbAretes);
     int count = 0;
 
     // On charge les stations dans le graphe
+    fscanf(fichierStations, "%[^,],%d", tmpChar, &tmpInt);
     while (fscanf(fichierStations, "%[^,],%d", graphe->stations[count]->nom, &graphe->stations[count]->id) != EOF)
+    {
+        // printf("%s,%d\n", graphe->stations[count]->nom, graphe->stations[count]->id);
         count++;
+    }
 
     // On charge les aretes dans le graphe
     count = 0;

@@ -12,7 +12,7 @@
 typedef struct station
 {
     int id;
-    char *nom;
+    char nom[50];
 } Station;
 
 // Structure pour stocker les données des arêtes (connexions directes)
@@ -20,7 +20,7 @@ typedef struct arete
 {
     int origine;
     int destination;
-    char *ligne;
+    char ligne[50];
     int poids;
 } Arete;
 
