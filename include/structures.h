@@ -1,8 +1,9 @@
-#ifndef __STRUCTURES._H__
+#ifndef __STRUCTURES_H__
 #define __STRUCTURES_H__
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define MINUTE_CONNEXION 1
 #define MINUTE_CHANGEMENT_LIGNE 5
@@ -11,7 +12,7 @@
 typedef struct station
 {
     int id;
-    char *nom;
+    char nom[50];
 } Station;
 
 // Structure pour stocker les données des arêtes (connexions directes)
@@ -19,7 +20,7 @@ typedef struct arete
 {
     int origine;
     int destination;
-    char *ligne;
+    char ligne[50];
     int poids;
 } Arete;
 
@@ -27,10 +28,14 @@ typedef struct arete
 typedef struct graphe
 {
     int nbStations;
-    Station *stations;
+    Station **stations;
     int nbAretes;
-    Arete *aretes;
+    Arete **aretes;
 } Graphe;
+
+Station *new_station();
+Arete *new_arete();
+Graphe *new_graphe(int nbStations, int nbAretes);
 
 Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes);
 
