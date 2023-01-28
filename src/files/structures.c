@@ -41,7 +41,7 @@ Graphe *new_graphe(int nbStations, int nbAretes)
     }
     for (int i = 0; i < nbStations; i++)
         graphe->stations[i] = new_station();
-    graphe->aretes = (Arete**)malloc(nbStations * sizeof(Arete*));
+    graphe->aretes = (Arete **)malloc(nbAretes * sizeof(Arete *));
     if (graphe->aretes == NULL)
     {
         printf("ERREUR: impossible de creer les aretes du graphe\n");
