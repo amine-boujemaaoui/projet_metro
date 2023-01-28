@@ -1,4 +1,4 @@
-#ifndef __STRUCTURES._H__
+#ifndef __STRUCTURES_H__
 #define __STRUCTURES_H__
 
 #include <stdio.h>
