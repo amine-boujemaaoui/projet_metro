@@ -5,8 +5,6 @@ Station *new_station()
 {
     Station *station = (Station *)malloc(sizeof(Station));
     assert(station != NULL);
-    station->id = NULL;
-    station->nom = NULL;
     return station;
 }
 
@@ -15,10 +13,6 @@ Arete *new_arete()
 {
     Arete *arete = (Arete *)malloc(sizeof(Arete));
     assert(arete != NULL);
-    arete->origine = NULL;
-    arete->destination = NULL;
-    arete->ligne = NULL;
-    arete->poids = NULL;
     return arete;
 }
 
@@ -30,82 +24,65 @@ Graphe *new_graphe(int nbStations, int nbAretes)
     graphe->stations = (Station **)malloc(nbStations * sizeof(Station *));
     assert(graphe->stations != NULL);
     for (int i = 0; i < nbStations; i++)
-    {
         graphe->stations[i] = new_station();
-    }
     graphe->aretes = (Arete **)malloc(nbStations * sizeof(Arete *));
     assert(graphe->aretes != NULL);
     for (int i = 0; i < nbAretes; i++)
-    {
         graphe->aretes[i] = new_arete();
-    }
     graphe->nbStations = nbStations;
     graphe->nbAretes = nbAretes;
     return graphe;
 }
 
 // Fonction pour lire les données des stations à partir d'un fichier
-void chargerGraphe(Graphe *graphe, char *nomFichierStations, char *nomFichierAretes)
+Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
 {
     FILE *fichierStations = fopen(nomFichierStations, "r");
     FILE *fichierAretes = fopen(nomFichierAretes, "r");
+    char *tmpChar;
+    int tmpInt;
     if (fichierStations == NULL)
     {
         printf("Impossible d'ouvrir le fichier %s\n", nomFichierStations);
         exit(1);
     }
-    int nbStations = 0;
-    while (fscanf(fichierStations, "%[^,],%d") != EOF)
-    {
-        nbStations++;
-    }
-    nbStations--; // On ne compte pas la premier ligne du fichier qui est l'entete
-    int nbAretes = 0;
-    while (fscanf(fichierAretes, "%[^,],%d") != EOF)
-    {
-        nbAretes++;
-    }
-    nbAretes--; // On ne compte pas la premier ligne du fichier qui est l'entete
-
-    Graphe *graphe = new_graphe();
-    for (int i = 0; i < count; i++)
-    {
-        graphe->stations[i] = (Station *)malloc(sizeof(Station));
-    }
-    while (fscanf(fichierStations, "%[^,],%d", graphe->stations[count].nom, &graphe->stations[count].id) != EOF)
-    {
-        count++;
-    }
-    // rewind(fichierStations);
-    fclose(fichierStations);
-    graphe->nbStations = count;
-
-    /*
-    fscanf(fichierStations, "%d", &graphe->nbStations);
-    graphe->stations = (Station *)malloc(graphe->nbStations * sizeof(Station));
-    for (int i = 0; i < graphe->nbStations; i++)
-    {
-        graphe->stations[i].id = i;
-        graphe->stations[i].nom = (char *)malloc(50 * sizeof(char));
-        fscanf(fichierStations, "%d,%[^\n]", &graphe->stations[i].id, &graphe->stations[i].nom);
-    }
-    fclose(fichierStations);
-    */
-
-    /*
-    FILE *fichierAretes = fopen(nomFichierAretes, "r");
-    if (fichierAretes == NULL)
+    if (nomFichierAretes == NULL)
     {
         printf("Impossible d'ouvrir le fichier %s\n", nomFichierAretes);
         exit(1);
     }
-    fscanf(fichierAretes, "%d", &graphe->nbAretes);
-    graphe->aretes = (Arete *)malloc(graphe->nbAretes * sizeof(Arete));
-    for (int i = 0; i < graphe->nbAretes; i++)
+
+    // On compte le nombre de station dans le fichier nomFichierAretes
+    int nbStations = 0;
+    while (fscanf(fichierStations, "%[^,],%d\n", tmpChar, ) != EOF)
     {
-        fscanf(fichierAretes, "%d,%d,%s", &graphe->aretes[i].origine, &graphe->aretes[i].destination, &graphe->aretes[i].ligne);
-        graphe->aretes[i].poids = MINUTE_CONNEXION;
+        nbStations++;
+        printf("%d\n", nbStations);
     }
+    nbStations--; // On ne compte pas la premier ligne du fichier qui est l'entete
+    rewind(fichierStations);
+
+    // On compte le nombre d'arrete dans le fichier nomFichierAretes
+    int nbAretes = 0;
+    while (fscanf(fichierAretes, "\n") != EOF)
+        nbAretes++;
+    nbAretes--; // On ne compte pas la premier ligne du fichier qui est l'entete
+    rewind(fichierAretes);
+
+    Graphe *graphe = new_graphe(nbStations, nbAretes);
+    int count = 0;
+
+    // On charge les stations dans le graphe
+    while (fscanf(fichierStations, "%[^,],%d", graphe->stations[count]->nom, &graphe->stations[count]->id) != EOF)
+        count++;
+
+    // On charge les aretes dans le graphe
+    count = 0;
+    while (fscanf(fichierAretes, "%d,%d,%[^\n]\n", &graphe->aretes[count]->origine, &graphe->aretes[count]->destination, graphe->aretes[count]->ligne) != EOF)
+        count++;
+
+    fclose(fichierStations);
     fclose(fichierAretes);
-    */
+
+    return graphe;
 }

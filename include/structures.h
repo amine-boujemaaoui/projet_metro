@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define MINUTE_CONNEXION 1
 #define MINUTE_CHANGEMENT_LIGNE 5
@@ -34,8 +35,8 @@ typedef struct graphe
 
 Station *new_station();
 Arete *new_arete();
-Graphe *new_graphe();
+Graphe *new_graphe(int nbStations, int nbAretes);
 
-void chargerGraphe(Graphe *graphe, char *nomFichierStations, char *nomFichierAretes);
+Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes);
 
 #endif
