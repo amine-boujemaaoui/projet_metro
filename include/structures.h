@@ -27,11 +27,15 @@ typedef struct arete
 typedef struct graphe
 {
     int nbStations;
-    Station *stations;
+    Station **stations;
     int nbAretes;
-    Arete *aretes;
+    Arete **aretes;
 } Graphe;
 
-Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes);
+Station *new_station();
+Arete *new_arete();
+Graphe *new_graphe();
+
+void chargerGraphe(Graphe *graphe, char *nomFichierStations, char *nomFichierAretes);
 
 #endif
