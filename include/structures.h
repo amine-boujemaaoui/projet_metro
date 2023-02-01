@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "functions.h"
 
 #define MINUTE_CONNEXION 1
 #define MINUTE_CHANGEMENT_LIGNE 5
@@ -46,6 +47,14 @@ typedef struct maillon
     Maillon *precedant; // pour ce deplacer en arriere dans la liste
 } Maillon;
 
+// Structure qui represente un element de la liste doublement chaine d'arete du tableau des aretes du graphe 
+typedef struct maillonArete
+{
+    Arete *arete;
+    Maillon *suivant;   // pour ce deplacer en avant dans la liste
+    Maillon *precedant; // pour ce deplacer en arriere dans la liste
+} MaillonArete;
+
 // Structure de la file neccesaire à l'algorithme
 typedef struct liste
 {
@@ -55,12 +64,22 @@ typedef struct liste
     Maillon *queue;
 } Liste;
 
+// Structure de la file neccesaire à l'algorithme
+typedef struct listeArrete
+{
+    uint32_t taille;
+    MaillonArete *tete;
+    MaillonArete *queue;
+} ListeArrete;
+
 // Fonction pour creer et allouer une station
 Station *new_station();
 // Fonction pour creer et allouer une arete
 Arete *new_arete();
 // Fonction pour creer et allouer un maillon
 Maillon *new_maillon();
+// Fonction pour creer et allouer un maillon
+MaillonArete *new_maillonArete();
 // Fonction pour creer et allouer une liste
 Liste *new_liste();
 // Fonction pour ajouter le maillon m en tete de la liste l
