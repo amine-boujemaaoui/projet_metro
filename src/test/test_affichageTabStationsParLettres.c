@@ -5,6 +5,6 @@ int main()
 {
     Graphe *graphe = chargerGraphe("data/stationsEdited.csv", "data/aretes.csv");
     Chemain *chemain = init_chemain(graphe);
-    printf("Origine: %d\nDestination: %d\n", chemain->origine, chemain->destination);
+    printf("Origine: %s\nDestination: %s\n", graphe->stations[chemain->origine]->nom, graphe->stations[chemain->destination]->nom);
     return EXIT_SUCCESS;
 }

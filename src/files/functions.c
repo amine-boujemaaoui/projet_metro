@@ -80,8 +80,8 @@ Chemain *new_chemain()
     return chemain;
 }
 
-    // Fonction pour instancier les variables d'une station
-    void set_station(Station *station, uint32_t id, char *nom, bool estVisite)
+// Fonction pour instancier les variables d'une station
+void set_station(Station *station, uint32_t id, char *nom, bool estVisite)
 {
     station->id = id;
     station->estVisite = estVisite;
@@ -341,7 +341,7 @@ void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres,
     printf("\n+-----+--------------------------------------------------+\n");
     printf("| ID  + Liste des stations                               |\n");
     printf("+-----+--------------------------------------------------+\n");
-    Maillon *station = tabStationsParLettres->tab[toupper(lettre) - 'A']->tete;
+    Maillon *station = tabStationsParLettres->tab[lettre - 'A']->tete;
     while (station != NULL)
     {
         printf("| %-3d | %-48s |\n", station->stationPivot->id, station->stationPivot->nom);
@@ -353,11 +353,27 @@ void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres,
 Chemain *init_chemain(Graphe *graphe)
 {
     Chemain *chemain = new_chemain();
+    bool departValide = false, arriverValide = false;
     char lettreOrigine, lettreDestination;
     uint32_t origine, destination;
+    Maillon *maillon;
     system("cls");
     printf("Entrez la premiere letre de la station de depart: ");
     scanf("%c", &lettreOrigine);
+    fflush(stdin);
+    lettreOrigine = toupper(lettreOrigine);
+    if (graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0)
+    {
+        while (graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0)
+        {
+            fflush(stdin);
+            system("cls");
+            printf("Il n'y a aucune station commencent par cette lettre!\n");
+            printf("Entrez la premiere letre de la station de depart: ");
+            scanf("%c", &lettreOrigine);
+            lettreOrigine = toupper(lettreOrigine);
+        }
+    }
     fflush(stdin);
     system("cls");
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
@@ -365,14 +381,69 @@ Chemain *init_chemain(Graphe *graphe)
     scanf("%d", &origine);
     fflush(stdin);
     system("cls");
+    maillon = graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->tete;
+    while (!departValide)
+    {
+        while (maillon != NULL)
+        {
+            if (maillon->stationPivot->id == origine)
+                departValide = true;
+            maillon = maillon->suivant;
+        }
+        if (!departValide)
+        {
+            fflush(stdin);
+            system("cls");
+            printf("l'id %d n'est pas une station de cette liste!\n", origine);
+            afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
+            printf("Entrez l'identifiant de la station de depart: ");
+            scanf("%d", &origine);
+            maillon = graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->tete;
+        }
+    }
+    fflush(stdin);
+    system("cls");
     printf("Entrez la premiere letre de la station d'arriver: ");
     scanf("%c", &lettreDestination);
+    lettreDestination = toupper(lettreDestination);
+    if (graphe->tabStationsParLettres->tab[lettreDestination - 'A']->taille == 0)
+    {
+        while (graphe->tabStationsParLettres->tab[lettreDestination - 'A']->taille == 0)
+        {
+            fflush(stdin);
+            system("cls");
+            printf("Il n'y a aucune station commencent par cette lettre!\n");
+            printf("Entrez la premiere letre de la station d'arriver: ");
+            scanf("%c", &lettreDestination);
+            lettreDestination = toupper(lettreDestination);
+        }
+    }
     fflush(stdin);
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
     printf("Entrez l'identifiant de la station d'arriver: ");
     scanf("%d", &destination);
     fflush(stdin);
     system("cls");
+    maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
+    while (!arriverValide)
+    {
+        while (maillon != NULL)
+        {
+            if (maillon->stationPivot->id == destination)
+                arriverValide = true;
+            maillon = maillon->suivant;
+        }
+        if (!arriverValide)
+        {
+            fflush(stdin);
+            system("cls");
+            printf("l'id %d n'est pas une station de cette liste!\n", destination);
+            afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
+            printf("Entrez l'identifiant de la station de depart: ");
+            scanf("%d", &destination);
+            maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
+        }
+    }
     chemain->origine = origine;
     chemain->destination = destination;
     return chemain;
