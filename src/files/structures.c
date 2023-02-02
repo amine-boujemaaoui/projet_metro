@@ -1,5 +1,18 @@
 #include "../../include/structures.h"
 
+// Fonction pour allouer de la memoire de taille size et afficher un le message message en cas d'echec
+void *myMalloc(char *message, uint64_t size)
+{
+    void *pointeur = malloc(size);
+    if (pointeur == NULL)
+    {
+        printf("%s\n", message);
+        exit(EXIT_FAILURE);
+    }
+    else
+        return pointeur;
+}
+
 // Fonction pour creer et allouer une station
 Station *new_station()
 {
@@ -23,21 +36,13 @@ Arete *new_arete()
 Maillon *new_maillon()
 {
     Maillon *maillon = (Maillon *)myMalloc("ERREUR: impossible de creer le maillon\n", sizeof(Maillon));
+    maillon->arete = NULL;
     maillon->stationPivot = NULL;
     maillon->stationAccessible = NULL;
     maillon->poids = 0;
     maillon->suivant = NULL;
     maillon->precedant = NULL;
     return maillon;
-}
-
-// Fonction pour creer et allouer un maillonArete
-MaillonArete *new_maillonArete()
-{
-    MaillonArete *maillonArete = (MaillonArete *)myMalloc("ERREUR: impossible de creer le maillon\n", sizeof(MaillonArete));
-    maillonArete->suivant = NULL;
-    maillonArete->precedant = NULL;
-    return maillonArete;
 }
 
 // Fonction pour creer et allouer une liste
@@ -49,6 +54,50 @@ Liste *new_liste()
     liste->taille = 0;
     liste->poidsTotal = 0;
     return liste;
+}
+
+// Fonction pour creer et allouer un graphe
+Graphe *new_graphe(uint32_t nbStations, uint32_t nbAretes)
+{
+    Graphe *graphe = (Graphe *)myMalloc("ERREUR: impossible de creer le graphe\n", sizeof(Graphe));
+    graphe->stations = (Station **)myMalloc("ERREUR: impossible de creer les stations du graphe\n", nbStations * sizeof(Station *));
+    graphe->aretes = (Liste **)myMalloc("ERREUR: impossible de creer le tableau de liste d'aretes du graphe\n", nbStations * sizeof(Liste *));
+    for (uint32_t i = 0; i < nbStations; i++)
+    {
+        graphe->stations[i] = new_station();
+        graphe->aretes[i] = new_liste();
+    }
+    graphe->nbStations = nbStations;
+    graphe->nbAretes = nbAretes;
+    return graphe;
+}
+
+// Fonction pour instancier les variables d'une station
+void set_station(Station *station, uint32_t id, char *nom, bool estVisite)
+{
+    station->id = id;
+    station->estVisite = estVisite;
+    strcpy(station->nom, nom);
+}
+
+// Fonction pour instancier les variables d'une arete
+void set_arete(Arete *arete, uint32_t origine, uint32_t destination, uint32_t poids, char *ligne)
+{
+    arete->origine = origine;
+    arete->destination = destination;
+    arete->poids = poids;
+    strcpy(arete->ligne, ligne);
+}
+
+// Fonction pour instancier les variables d'un maillon
+void set_maillon(Maillon *maillon, Arete *arete, Station *stationPivot, Station *stationAccessible, Maillon *suivant, Maillon *precedant, uint32_t poids)
+{
+    maillon->arete = arete;
+    maillon->stationPivot = stationPivot;
+    maillon->stationAccessible = stationAccessible;
+    maillon->suivant = suivant;
+    maillon->precedant = precedant;
+    maillon->poids = poids;
 }
 
 // Fonction pour ajouter le maillon m en tete de la liste l
@@ -168,19 +217,4 @@ Maillon *rem_position(Liste *l, uint32_t pos)
         l->taille--;
         return maillon;
     }
-}
-
-// Fonction pour creer et allouer un graphe
-Graphe *new_graphe(uint32_t nbStations, uint32_t nbAretes)
-{
-    Graphe *graphe = (Graphe *)myMalloc("ERREUR: impossible de creer le graphe\n", sizeof(Graphe));
-    graphe->stations = (Station **)myMalloc("ERREUR: impossible de creer les stations du graphe\n", nbStations * sizeof(Station *));
-    for (uint32_t i = 0; i < nbStations; i++)
-        graphe->stations[i] = new_station();
-    graphe->stations = (Arete **)myMalloc("ERREUR: impossible de creer les aretes du graphe\n", nbStations * sizeof(Liste *));
-    for (uint32_t i = 0; i < nbAretes; i++)
-        graphe->aretes[i] = new_arete();
-    graphe->nbStations = nbStations;
-    graphe->nbAretes = nbAretes;
-    return graphe;
 }
