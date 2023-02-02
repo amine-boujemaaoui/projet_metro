@@ -17,7 +17,10 @@
 #define MINUTE_CHANGEMENT_LIGNE 5
 #define NB_LETTRE 26
 
-// Structure pour stocker les données des stations
+/**
+ * @brief Structure pour stocker les données des stations
+ *
+ */
 typedef struct station
 {
     uint32_t id;
@@ -25,7 +28,10 @@ typedef struct station
     bool estVisite;
 } Station;
 
-// Structure pour stocker les données des arêtes (connexions directes)
+/**
+ * @brief Structure pour stocker les données des arêtes (connexions directes)
+ *
+ */
 typedef struct arete
 {
     uint32_t origine;
@@ -34,7 +40,10 @@ typedef struct arete
     char ligne[SIZE_NAME_LIGNE];
 } Arete;
 
-// Structure qui represente un element de la liste doublement chaine
+/**
+ * @brief Structure qui represente un element de la liste doublement chaine
+ *
+ */
 typedef struct maillon
 {
     Arete *arete;
@@ -45,7 +54,10 @@ typedef struct maillon
     uint32_t poids;            // le poids pour ce dplacer de la station pivot a la station accesible
 } Maillon;
 
-// Structure de la file neccesaire à l'algorithme
+/**
+ * @brief Structure de la file neccesaire à l'algorithme
+ *
+ */
 typedef struct liste
 {
     uint32_t taille;
@@ -54,25 +66,36 @@ typedef struct liste
     Maillon *queue;
 } Liste;
 
+/**
+ * @brief Structure pour enregistrer une requete de l'utilisateur
+ *
+ */
 typedef struct chemain
 {
     uint32_t origine;
     uint32_t destination;
 } Chemain;
 
+/**
+ * @brief Structure pour enregistrer sous forme ordonne par lettre les stations
+ *
+ */
 typedef struct tabStationsParLettres
 {
     Liste **tab;
 } TabStationsParLettres;
 
-// Structure pour stocker les données du graphe
+/**
+ * @brief Structure pour stocker les données du graphe
+ *
+ */
 typedef struct graphe
 {
     Station **stations;
     Liste **aretes;
     uint32_t nbStations;
     uint32_t nbAretes;
-    TabStationsParLettres *tabStationsParLettres; // On garde le tableau des 
+    TabStationsParLettres *tabStationsParLettres; // On garde le tableau des
 } Graphe;
 
 #endif

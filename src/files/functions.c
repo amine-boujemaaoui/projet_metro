@@ -1,6 +1,5 @@
 #include "../../include/functions.h"
 
-// Fonction pour allouer de la memoire de taille size et afficher un le message message en cas d'echec
 void *myMalloc(char *message, uint64_t size)
 {
     void *pointeur = malloc(size);
@@ -13,7 +12,6 @@ void *myMalloc(char *message, uint64_t size)
         return pointeur;
 }
 
-// Fonction pour creer et allouer une station
 Station *new_station()
 {
     Station *station = (Station *)myMalloc("ERREUR: impossible de creer la station\n", sizeof(Station));
@@ -22,7 +20,6 @@ Station *new_station()
     return station;
 }
 
-// Fonction pour creer et allouer une arete
 Arete *new_arete()
 {
     Arete *arete = (Arete *)myMalloc("ERREUR: impossible de creer l'arete\n", sizeof(Arete));
@@ -32,7 +29,6 @@ Arete *new_arete()
     return arete;
 }
 
-// Fonction pour creer et allouer un maillon
 Maillon *new_maillon()
 {
     Maillon *maillon = (Maillon *)myMalloc("ERREUR: impossible de creer le maillon\n", sizeof(Maillon));
@@ -45,7 +41,6 @@ Maillon *new_maillon()
     return maillon;
 }
 
-// Fonction pour creer et allouer une liste
 Liste *new_liste()
 {
     Liste *liste = (Liste *)myMalloc("ERREUR: impossible de creer la liste\n", sizeof(Liste));
@@ -56,7 +51,6 @@ Liste *new_liste()
     return liste;
 }
 
-// Fonction pour creer et allouer un graphe
 Graphe *new_graphe(uint32_t nbStations, uint32_t nbAretes)
 {
     Graphe *graphe = (Graphe *)myMalloc("ERREUR: impossible de creer le graphe\n", sizeof(Graphe));
@@ -80,7 +74,6 @@ Chemain *new_chemain()
     return chemain;
 }
 
-// Fonction pour instancier les variables d'une station
 void set_station(Station *station, uint32_t id, char *nom, bool estVisite)
 {
     station->id = id;
@@ -88,7 +81,6 @@ void set_station(Station *station, uint32_t id, char *nom, bool estVisite)
     strcpy(station->nom, nom);
 }
 
-// Fonction pour instancier les variables d'une arete
 void set_arete(Arete *arete, uint32_t origine, uint32_t destination, uint32_t poids, char *ligne)
 {
     arete->origine = origine;
@@ -97,7 +89,6 @@ void set_arete(Arete *arete, uint32_t origine, uint32_t destination, uint32_t po
     strcpy(arete->ligne, ligne);
 }
 
-// Fonction pour instancier les variables d'un maillon
 void set_maillon(Maillon *maillon, Arete *arete, Station *stationPivot, Station *stationAccessible, Maillon *suivant, Maillon *precedant, uint32_t poids)
 {
     maillon->arete = arete;
@@ -108,7 +99,6 @@ void set_maillon(Maillon *maillon, Arete *arete, Station *stationPivot, Station 
     maillon->poids = poids;
 }
 
-// Fonction pour ajouter le maillon m en tete de la liste l
 void add_tete(Liste *l, Maillon *m)
 {
     m->suivant = l->tete;
@@ -121,7 +111,6 @@ void add_tete(Liste *l, Maillon *m)
     l->taille++;
 }
 
-// Fonction pour ajouter le maillon m en queue de la liste l
 void add_queue(Liste *l, Maillon *m)
 {
     m->suivant = NULL;
@@ -134,7 +123,6 @@ void add_queue(Liste *l, Maillon *m)
     l->taille++;
 }
 
-// Fonction pour ajouter le maillon m à la position pos de la liste l
 void add_position(Liste *l, Maillon *m, uint32_t pos)
 {
     Maillon *precedant, *suivant;
@@ -161,7 +149,6 @@ void add_position(Liste *l, Maillon *m, uint32_t pos)
     }
 }
 
-// Fonction pour ajouter le maillon m à la liste l en gradant la liste trier dans l'ordre croissant de poid
 void add_poidMin(Liste *l, Maillon *m)
 {
     uint32_t pos = 0;
@@ -174,7 +161,6 @@ void add_poidMin(Liste *l, Maillon *m)
     add_position(l, m, pos);
 }
 
-// Fonction pour retirer le maillon en tete de la liste l
 Maillon *rem_tete(Liste *l)
 {
     Maillon *maillon = l->tete;
@@ -187,7 +173,6 @@ Maillon *rem_tete(Liste *l)
     return maillon;
 }
 
-// Fonction pour retirer le maillon en queue de la liste l
 Maillon *rem_queue(Liste *l)
 {
     Maillon *maillon = l->queue;
@@ -200,7 +185,6 @@ Maillon *rem_queue(Liste *l)
     return maillon;
 }
 
-// Fonction pour retirer le maillon a la position pos de la liste l
 Maillon *rem_position(Liste *l, uint32_t pos)
 {
     Maillon *maillon, *precedant, *suivant;
@@ -227,7 +211,6 @@ Maillon *rem_position(Liste *l, uint32_t pos)
     }
 }
 
-// Fonction pour creer et allouer un tabStations
 TabStationsParLettres *new_tabStationsParLettres()
 {
     TabStationsParLettres *tabStationsParLettres = (TabStationsParLettres *)myMalloc("ERREUR: impossible de creer le tableau des station pas lettre\n", sizeof(TabStationsParLettres));
@@ -239,7 +222,6 @@ TabStationsParLettres *new_tabStationsParLettres()
     return tabStationsParLettres;
 }
 
-// Fonction pour afficher le tableau des station par lettre
 void afficher_tabStationsParLettres(TabStationsParLettres *tabStationsParLettres)
 {
     for (uint8_t i = 0; i < NB_LETTRE; i++)
@@ -255,7 +237,6 @@ void afficher_tabStationsParLettres(TabStationsParLettres *tabStationsParLettres
     }
 }
 
-// Fonction pour lire les données des stations à partir d'un fichier
 Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
 {
     FILE *fichierStations = fopen(nomFichierStations, "r");
