@@ -1,12 +1,13 @@
-#include "../../include/algo.h"
+#include "../../include/functions.h"
 #define ID 20
 
 int main()
 {
+    setlocale(LC_ALL, "fr_FR.utf-32");
     printf("\ndebut chargement ...\n\n");
-    Graphe *graphe = chargerGraphe("data/stations.csv", "data/aretes.csv");
+    Graphe *graphe = chargerGraphe("data/stationsEdited.csv", "data/aretes.csv");
     printf("Nom,Id,estVisite\n=================\n");
-    printf("%s,%d,%s\n=================\n", graphe->stations[ID]->nom, graphe->stations[ID]->id, graphe->stations[ID]->estVisite ? "true" : "false");
+    wprintf(L"%ls,%d,%s\n=================\n", graphe->stations[ID]->nom, graphe->stations[ID]->id, graphe->stations[ID]->estVisite ? "true" : "false");
     Maillon *aretes = graphe->aretes[ID]->tete;
     for (int count = 0; count < graphe->aretes[ID]->taille; count++)
     {
