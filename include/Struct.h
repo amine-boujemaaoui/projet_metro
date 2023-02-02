@@ -1,5 +1,5 @@
-#ifndef __STRUCTURES_H__
-#define __STRUCTURES_H__
+#ifndef __STRUCT_H__
+#define __STRUCT_H__
 
 #include <stdbool.h>
 #include <stdlib.h>
