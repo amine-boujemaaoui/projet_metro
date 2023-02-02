@@ -1,5 +1,6 @@
 #include "../../include/includes.h"
 
+
 TabStationsParLettres *new_tabStationsParLettres()
 {
     TabStationsParLettres *tabStationsParLettres = (TabStationsParLettres *)myMalloc("ERREUR: impossible de creer le tableau des station pas lettre\n", sizeof(TabStationsParLettres));
