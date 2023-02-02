@@ -368,7 +368,7 @@ Chemain *init_chemain(Graphe *graphe)
         {
             fflush(stdin);
             system("cls");
-            printf("Il n'y a aucune station commencent par cette lettre!\n");
+            printf("Il n'y a aucune station commencant par cette lettre!\n");
             printf("Entrez la premiere letre de la station de depart: ");
             scanf("%c", &lettreOrigine);
             lettreOrigine = toupper(lettreOrigine);
