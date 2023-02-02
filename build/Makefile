@@ -1,15 +1,13 @@
 CC=gcc
-CFLAG= -Wall
 CFLAGS= -Wall -c
 
 ALL : prog
 
 prog: main.o Functions.o Liste.o Malloc.o Set.o
-	$(CC) $(CFLAG) $^ -o $@
+	$(CC) -Wall $^ -o $@
 
 main.o: ../src/main.c ../include/includes.h ../include/Functions.h ../include/Struct.h ../include/Liste.h ../include/Malloc.h ../include/Set.h
 	$(CC) $(CFLAGS) $<
-
 Functions.o: ../src/files/Functions.c ../include/Functions.h ../include/Struct.h
 	$(CC) $(CFLAGS) $<
 Liste.o: ../src/files/Liste.c ../include/Liste.h ../include/Struct.h
