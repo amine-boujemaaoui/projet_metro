@@ -219,3 +219,9 @@ Chemain *init_chemain(Graphe *graphe)
     chemain->destination = destination;
     return chemain;
 }
+
+void djikstra(char *nomFichierStations, char *nomFichierAretes)
+{
+    Graphe *graphe = chargerGraphe(nomFichierStations, nomFichierAretes);
+    Chemain *chemain = init_chemain(graphe);
+}

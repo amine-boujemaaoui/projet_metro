@@ -35,4 +35,12 @@ void afficher_tabStations(TabStationsParLettres *tabStationsParLettres);
  */
 void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres, char lettre);
 
+/**
+ * @brief La fonction principale qui implemente l'algo djikstra
+ *
+ * @param nomFichierStations le fichier ou sont les stations qui font office de sommet
+ * @param nomFichierAretes le fichier ou sont les aretes
+ */
+void djikstra(char *nomFichierStations, char *nomFichierAretes);
+
 #endif
