@@ -4,12 +4,12 @@
 #include "Struct.h"
 
 /**
- * @brief Fonction pour initialiser un nouveau chemain par l'utilisateur
+ * @brief Fonction pour initialiser un nouveau chemin par l'utilisateur
  *
  * @param graphe le graphe ou sont disponible les stations
- * @return Chemain*
+ * @return Chemin*
  */
-Chemain *init_chemain(Graphe *graphe);
+Chemin *init_chemin(Graphe *graphe);
 
 /**
  * @brief Fonction pour lire les données des stations à partir d'un fichier
@@ -18,7 +18,8 @@ Chemain *init_chemain(Graphe *graphe);
  * @param nomFichierAretes le fichier ou sont les aretes
  * @return Graphe*
  */
-Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes);
+Graphe *chargerGraphe(char *nomFichierStations,
+                      char *nomFichierAretes);
 
 /**
  * @brief Fonction pour afficher le tableau des station par lettre
@@ -33,7 +34,8 @@ void afficher_tabStations(TabStationsParLettres *tabStationsParLettres);
  * @param tabStationsParLettres le tableau des stations par lettre à afficher
  * @param lettre la lettre choisi
  */
-void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres, char lettre);
+void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres,
+                                   char lettre);
 
 /**
  * @brief La fonction principale qui implemente l'algo djikstra
@@ -41,6 +43,7 @@ void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres,
  * @param nomFichierStations le fichier ou sont les stations qui font office de sommet
  * @param nomFichierAretes le fichier ou sont les aretes
  */
-void djikstra(char *nomFichierStations, char *nomFichierAretes);
+void djikstra(char *nomFichierStations,
+              char *nomFichierAretes);
 
 #endif

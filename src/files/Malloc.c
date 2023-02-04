@@ -66,10 +66,10 @@ Graphe *new_graphe(uint32_t nbStations, uint32_t nbAretes)
     return graphe;
 }
 
-Chemain *new_chemain()
+Chemin *new_chemin()
 {
-    Chemain *chemain = (Chemain *)myMalloc("ERREUR: impossible de creer le chemain\n", sizeof(Chemain));
-    chemain->origine = 0;
-    chemain->destination = 0;
-    return chemain;
+    Chemin *chemin = (Chemin *)myMalloc("ERREUR: impossible de creer le chemin\n", sizeof(Chemin));
+    chemin->origine = 0;
+    chemin->destination = 0;
+    return chemin;
 }

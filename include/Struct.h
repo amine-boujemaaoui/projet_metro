@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <wchar.h>
 #include <ctype.h>
+#include <math.h>
 
 #define SIZE_NAME_STATION 50
 #define SIZE_NAME_LIGNE 5
@@ -51,7 +52,8 @@ typedef struct maillon
     Station *stationAccessible;
     struct maillon *suivant;   // pour ce deplacer en avant dans la liste
     struct maillon *precedant; // pour ce deplacer en arriere dans la liste
-    uint32_t poids;            // le poids pour ce dplacer de la station pivot a la station accesible
+    uint32_t poids;            // le poids pour ce deplacer de la station pivot a la station accessible
+    char lastLigne[SIZE_NAME_LIGNE];
 } Maillon;
 
 /**
@@ -61,7 +63,7 @@ typedef struct maillon
 typedef struct liste
 {
     uint32_t taille;
-    uint32_t poidsTotal; // durré total du chemain trouver
+    uint32_t poidsTotal; // durré total du chemin trouver
     Maillon *tete;
     Maillon *queue;
 } Liste;
@@ -70,11 +72,11 @@ typedef struct liste
  * @brief Structure pour enregistrer une requete de l'utilisateur
  *
  */
-typedef struct chemain
+typedef struct chemin
 {
     uint32_t origine;
     uint32_t destination;
-} Chemain;
+} Chemin;
 
 /**
  * @brief Structure pour enregistrer sous forme ordonne par lettre les stations

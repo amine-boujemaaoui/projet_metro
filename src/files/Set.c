@@ -15,7 +15,7 @@ void set_arete(Arete *arete, uint32_t origine, uint32_t destination, uint32_t po
     strcpy(arete->ligne, ligne);
 }
 
-void set_maillon(Maillon *maillon, Arete *arete, Station *stationPivot, Station *stationAccessible, Maillon *suivant, Maillon *precedant, uint32_t poids)
+void set_maillon(Maillon *maillon, Arete *arete, Station *stationPivot, Station *stationAccessible, Maillon *suivant, Maillon *precedant, uint32_t poids, char *lastLigne)
 {
     maillon->arete = arete;
     maillon->stationPivot = stationPivot;
@@ -23,4 +23,5 @@ void set_maillon(Maillon *maillon, Arete *arete, Station *stationPivot, Station 
     maillon->suivant = suivant;
     maillon->precedant = precedant;
     maillon->poids = poids;
+    strcpy(maillon->lastLigne, lastLigne);
 }

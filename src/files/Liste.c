@@ -54,10 +54,16 @@ void add_poidMin(Liste *l, Maillon *m)
 {
     uint32_t pos = 0;
     Maillon *maillon = l->tete;
-    while (m->poids > maillon->poids && maillon->suivant != NULL)
+    if (maillon == NULL)
     {
-        maillon = maillon->suivant;
-        pos++;
+        pos = 0;
+    }
+    else{
+        while (m->poids > maillon->poids && maillon->suivant != NULL)
+        {
+            maillon = maillon->suivant;
+            pos++;
+        }
     }
     add_position(l, m, pos);
 }

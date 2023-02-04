@@ -3,7 +3,7 @@ CFLAGS= -Wall -c
 
 ALL : prog
 
-prog: main.o Functions.o Liste.o Malloc.o Set.o
+prog: Functions.o Liste.o Malloc.o Set.o
 	$(CC) -Wall $^ -o $@
 
 main.o: ../src/main.c ../include/includes.h ../include/Functions.h ../include/Struct.h ../include/Liste.h ../include/Malloc.h ../include/Set.h

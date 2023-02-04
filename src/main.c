@@ -3,8 +3,6 @@
 
 int main()
 {
-    Graphe *graphe = chargerGraphe("../data/stationsEdited.csv", "../data/aretes.csv");
-    Chemain *chemain = init_chemain(graphe);
-    printf("Origine: %s\nDestination: %s\n", graphe->stations[chemain->origine]->nom, graphe->stations[chemain->destination]->nom);
+    djikstra("../data/stationsEdited.csv", "../data/aretes.csv");
     return EXIT_SUCCESS;
 }
