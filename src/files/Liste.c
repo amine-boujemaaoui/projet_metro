@@ -39,7 +39,7 @@ void add_position(Liste *l, Maillon *m, uint32_t pos)
     else
     {
         precedant = l->tete;
-        for (uint32_t i = 0; i < pos; i++)
+        for (uint32_t i = 0; i < pos - 1; i++)
             precedant = precedant->suivant;
         suivant = precedant->suivant;
         precedant->suivant = m;
@@ -60,9 +60,10 @@ void add_poidMin(Liste *l, Maillon *m)
     }
     else
     {
-        while (m->poids > maillon->poids && maillon->suivant != NULL)
+        while (maillon != NULL && m->poids > maillon->poids)
         {
-            printf("padd = %d, pliste = %d | ", m->poids, maillon->poids);
+
+            // printf("%p\n", maillon->suivant);
             maillon = maillon->suivant;
             pos++;
         }
@@ -129,7 +130,6 @@ Maillon *rem_position(Liste *l, uint32_t pos)
 
 bool isin(Liste *l, uint32_t id)
 {
-    bool isin = false;
     if (l->taille == 0)
     {
         return false;

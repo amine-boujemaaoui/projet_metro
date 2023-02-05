@@ -229,29 +229,21 @@ void djikstra(char *nomFichierStations, char *nomFichierAretes)
             if (!graphe->stations[a->arete->destination]->estVisite)
             {
                 poids = MINUTE_CONNEXION;
-                if ((listePivots->tete->lastLigne != a->arete->ligne) && (strcmp(listePivots->tete->lastLigne, "DEFAULT") != 0))
-                    poids += MINUTE_CHANGEMENT_LIGNE;
-                if (!isin(stationsVoisines, a->arete->destination))
+                if ((strcmp(listePivots->tete->lastLigne, a->arete->ligne) != 0) && (strcmp(listePivots->tete->lastLigne, "DEFAULT") != 0))
                 {
+                    printf("Derniere ligne: %s et ligne utiliser: %s.\n", listePivots->tete->lastLigne, a->arete->ligne);
+                    poids += MINUTE_CHANGEMENT_LIGNE;
+                }
+                // if (!isin(stationsVoisines, a->arete->destination))
+                // {
                     m = new_maillon();
-                    set_maillon(m,
-                                NULL,
-                                graphe->stations[a->arete->destination],
-                                listePivots->tete->stationPivot,
-                                NULL,
-                                NULL,
-                                listePivots->poidsTotal + poids,
-                                a->arete->ligne);
+                    set_maillon(m, NULL, graphe->stations[a->arete->destination], listePivots->tete->stationPivot, NULL, NULL, listePivots->poidsTotal + poids, a->arete->ligne);
                     add_poidMin(stationsVoisines, m);
                     printf("Ajout de %d venant de %d avec la ligne %s et un poids de %d.\n", m->stationPivot->id, m->stationAccessible->id, m->lastLigne, m->poids);
-                }
+                // }
             }
             a = a->suivant;
         }
-        r = rem_tete(stationsVoisines);
-        listePivots->poidsTotal = r->poids;
-        add_tete(listePivots, r);
-        listePivots->tete->stationPivot->estVisite = true;
         Maillon *tempSV = stationsVoisines->tete;
         printf("stationsVoisines:");
         while (tempSV != NULL)
@@ -268,6 +260,11 @@ void djikstra(char *nomFichierStations, char *nomFichierAretes)
             tempLP = tempLP->suivant;
         }
         printf("\n\n");
+        r = rem_tete(stationsVoisines);
+        printf("maillon retirer: (%s)[%d]%d\n", r->lastLigne, r->poids, r->stationPivot->id);
+        listePivots->poidsTotal = r->poids;
+        add_tete(listePivots, r);
+        listePivots->tete->stationPivot->estVisite = true;
         count++;
     }
     // Maillon *affichage = listePivots->queue;
