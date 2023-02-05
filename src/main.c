@@ -3,6 +3,6 @@
 
 int main()
 {
-    djikstra("../data/stations_TEST.csv", "../data/aretes_TEST.csv");
+    djikstra("../data/stations.csv", "../data/aretes.csv");
     return EXIT_SUCCESS;
 }

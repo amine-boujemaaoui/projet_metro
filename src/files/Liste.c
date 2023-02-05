@@ -137,10 +137,11 @@ bool isin(Liste *l, uint32_t id)
     else
     {
         Maillon *maillon = l->tete;
-        while (maillon->suivant != NULL)
+        while (maillon != NULL)
         {
             if (id == maillon->stationPivot->id)
                 return true;
+            maillon = maillon->suivant;
         }
         return false;
     }

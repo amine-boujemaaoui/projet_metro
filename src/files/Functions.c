@@ -111,9 +111,7 @@ void afficher_tabStations(TabStationsParLettres *tabStationsParLettres)
 
 void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres, char lettre)
 {
-    printf("\n+-----+--------------------------------------------------+\n");
-    printf("| ID  | Liste des stations                               |\n");
-    printf("+-----+--------------------------------------------------+\n");
+    printf("+-----+--------------------------------------------------+\n| ID  | Liste des stations                               |\n+-----+--------------------------------------------------+\n");
     Maillon *station = tabStationsParLettres->tab[lettre - 'A']->tete;
     while (station != NULL)
     {
@@ -135,8 +133,7 @@ Chemin *init_chemin(Graphe *graphe)
     lettreOrigine = toupper(lettreOrigine);
     while (graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0)
     {
-        printf("Il n'y a aucune station commencant par cette lettre!\n");
-        printf("Entrez la premiere letre de la station de depart: ");
+        printf("Il n'y a aucune station commencant par cette lettre!\nEntrez la premiere letre de la station de depart: ");
         scanf(" %c", &lettreOrigine);
         lettreOrigine = toupper(lettreOrigine);
     }
@@ -223,57 +220,87 @@ void djikstra(char *nomFichierStations, char *nomFichierAretes)
     while (count < graphe->nbStations && listePivots->tete->stationPivot->id != chemin->destination)
     {
         a = graphe->aretes[listePivots->tete->stationPivot->id]->tete;
-        for (uint32_t i = 0; i < graphe->aretes[listePivots->tete->stationPivot->id]->taille; i++)
+        while (a != NULL)
         {
-            // printf("%d,%d,%s,%d,%s\n", a->arete->origine, a->arete->destination, a->arete->ligne, listePivots->poidsTotal, graphe->stations[a->arete->destination]->estVisite ? "true" : "false");
             if (!graphe->stations[a->arete->destination]->estVisite)
             {
                 poids = MINUTE_CONNEXION;
                 if ((strcmp(listePivots->tete->lastLigne, a->arete->ligne) != 0) && (strcmp(listePivots->tete->lastLigne, "DEFAULT") != 0))
                 {
-                    printf("Derniere ligne: %s et ligne utiliser: %s.\n", listePivots->tete->lastLigne, a->arete->ligne);
                     poids += MINUTE_CHANGEMENT_LIGNE;
                 }
-                // if (!isin(stationsVoisines, a->arete->destination))
-                // {
-                    m = new_maillon();
-                    set_maillon(m, NULL, graphe->stations[a->arete->destination], listePivots->tete->stationPivot, NULL, NULL, listePivots->poidsTotal + poids, a->arete->ligne);
-                    add_poidMin(stationsVoisines, m);
-                    printf("Ajout de %d venant de %d avec la ligne %s et un poids de %d.\n", m->stationPivot->id, m->stationAccessible->id, m->lastLigne, m->poids);
-                // }
+                m = new_maillon();
+                set_maillon(m, NULL, graphe->stations[a->arete->destination], listePivots->tete->stationPivot, NULL, NULL, listePivots->poidsTotal + poids, a->arete->ligne);
+                add_poidMin(stationsVoisines, m);
+                // printf("+ (%d,%d)(%s)[%d]", m->stationAccessible->id, m->stationPivot->id, m->lastLigne, m->poids);
             }
             a = a->suivant;
         }
-        Maillon *tempSV = stationsVoisines->tete;
-        printf("stationsVoisines:");
-        while (tempSV != NULL)
-        {
-            printf("(%s)[%d]%d -> ", tempSV->lastLigne, tempSV->poids, tempSV->stationPivot->id);
-            tempSV = tempSV->suivant;
-        }
-        printf("\n");
-        Maillon *tempLP = listePivots->tete;
-        printf("listePivots:");
-        while (tempLP != NULL)
-        {
-            printf("(%s)[%d]%d -> ", tempLP->lastLigne, tempLP->poids, tempLP->stationPivot->id);
-            tempLP = tempLP->suivant;
-        }
-        printf("\n\n");
+        // Maillon *tempSV = stationsVoisines->tete;
+        // printf("\nSV:");
+        // while (tempSV != NULL)
+        // {
+        //     printf("(%d,%d)(%s)[%d] -> ", tempSV->stationAccessible->id ,tempSV->stationPivot->id, tempSV->lastLigne, tempSV->poids);
+        //     tempSV = tempSV->suivant;
+        // }
+        // Maillon *tempLP = listePivots->tete;
+        // printf("\nLP:");
+        // while (tempLP != NULL)
+        // {
+        //     printf("%d(%s)[%d] -> ",  tempLP->stationPivot->id, tempLP->lastLigne, tempLP->poids);
+        //     tempLP = tempLP->suivant;
+        // }
+        // printf("\nStation voisine a retier: %d(%s)[%d]\n", stationsVoisines->tete->stationPivot->id, stationsVoisines->tete->lastLigne, stationsVoisines->tete->poids);
         r = rem_tete(stationsVoisines);
-        printf("maillon retirer: (%s)[%d]%d\n", r->lastLigne, r->poids, r->stationPivot->id);
+        // printf("Pivot deja prsent? %s\n", isin(listePivots, r->stationPivot->id) ? "true" : "false");
+        while (isin(listePivots, r->stationPivot->id) && stationsVoisines->taille != 0)
+        {
+            free(r);
+            r = rem_tete(stationsVoisines);
+        }
+        // printf("maillon retirer: (%s)[%d]%d\n", r->lastLigne, r->poids, r->stationPivot->id);
         listePivots->poidsTotal = r->poids;
         add_tete(listePivots, r);
         listePivots->tete->stationPivot->estVisite = true;
         count++;
     }
-    // Maillon *affichage = listePivots->queue;
-    // for (uint32_t j = 0; j < listePivots->taille; j++)
-    // {
-    //     while (affichage->precedant != NULL)
-    //     {
-    //         printf("(%s)%s -> ", affichage->lastLigne, affichage->stationPivot->nom);
-    //     }
-    // }
-    // printf("\n");
+    Maillon *tempLP = listePivots->tete;
+    printf("\nLP:");
+    uint32_t sa = 0;
+    while (tempLP != NULL)
+    {
+        if (tempLP->stationAccessible == NULL)
+        {
+            sa = 0;
+        }
+        else
+        {
+            sa = tempLP->stationAccessible->id;
+        }
+
+        printf("(%d,%d)(%s)[%d] -> ", sa, tempLP->stationPivot->id, tempLP->lastLigne, tempLP->poids);
+        tempLP = tempLP->suivant;
+    }
+    Maillon *affichage, *last;
+    affichage = listePivots->tete;
+    last = affichage;
+    affichage = affichage->suivant;
+    while (affichage != NULL)
+    {
+        if (last->stationPivot->id == chemin->origine)
+        {
+            affichage = NULL;
+        }
+        else
+        {
+            printf("\n(%d,%d)(%s)[%d]\n", last->stationAccessible->id, last->stationPivot->id, last->lastLigne, last->poids);
+            while ((affichage != NULL) && (last->stationAccessible->id != affichage->stationPivot->id))
+            {
+                // printf("(%d,%d) - (%d,%d)\n", last->stationAccessible->id, last->stationPivot->id, affichage->stationAccessible->id, affichage->stationPivot->id);
+                affichage = affichage->suivant;
+            }
+            last = affichage;
+            affichage = listePivots->tete;
+        }
+    }
 }
