@@ -1,4 +1,7 @@
-#include "../../include/includes.h"
+#include "../../include/Struct.h"
+#include "../../include/Liste.h"
+#include "../../include/Malloc.h"
+#include "../../include/Set.h"
 
 TabStationsParLettres *new_tabStationsParLettres()
 {
@@ -130,15 +133,12 @@ Chemin *init_chemin(Graphe *graphe)
     printf("Entrez la premiere letre de la station de depart: ");
     scanf(" %c", &lettreOrigine);
     lettreOrigine = toupper(lettreOrigine);
-    if (graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0)
+    while (graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0)
     {
-        while (graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0)
-        {
-            printf("Il n'y a aucune station commencant par cette lettre!\n");
-            printf("Entrez la premiere letre de la station de depart: ");
-            scanf(" %c", &lettreOrigine);
-            lettreOrigine = toupper(lettreOrigine);
-        }
+        printf("Il n'y a aucune station commencant par cette lettre!\n");
+        printf("Entrez la premiere letre de la station de depart: ");
+        scanf(" %c", &lettreOrigine);
+        lettreOrigine = toupper(lettreOrigine);
     }
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
     printf("Entrez l'identifiant de la station de depart: ");
@@ -155,7 +155,7 @@ Chemin *init_chemin(Graphe *graphe)
         if (!departValide)
         {
             printf("l'id %d n'est pas une station de cette liste!\n", origine);
-            afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
+            // afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
             printf("Entrez l'identifiant de la station de depart: ");
             scanf(" %d", &origine);
             maillon = graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->tete;
@@ -180,7 +180,7 @@ Chemin *init_chemin(Graphe *graphe)
     maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
     while (!arriverValide)
     {
-        while (maillon != NULL)
+        while (maillon != NULL && !arriverValide)
         {
             if (maillon->stationPivot->id == destination)
                 arriverValide = true;
@@ -189,7 +189,7 @@ Chemin *init_chemin(Graphe *graphe)
         if (!arriverValide)
         {
             printf("l'id %d n'est pas une station de cette liste!\n", destination);
-            afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
+            // afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
             printf("Entrez l'identifiant de la station de depart: ");
             scanf(" %d", &destination);
             maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
@@ -206,53 +206,71 @@ void djikstra(char *nomFichierStations, char *nomFichierAretes)
     Chemin *chemin = init_chemin(graphe);
     Liste *listePivots = new_liste();
     Liste *stationsVoisines = new_liste();
-    // bool fini = false;
     uint32_t poids = 0;
-    Maillon *m, *a, *p, *r;
+    Maillon *m, *a, *r;
     m = new_maillon();
-    set_maillon(m, NULL, graphe->stations[chemin->origine], NULL, NULL, NULL, 0, "DEFAULT");
+    set_maillon(m,
+                NULL,
+                graphe->stations[chemin->origine],
+                NULL,
+                NULL,
+                NULL,
+                0,
+                "DEFAULT");
     add_tete(listePivots, m);
     listePivots->tete->stationPivot->estVisite = true;
-    // printf("%d-%s %s T=%d\n", listePivots->tete->stationPivot->id, listePivots->tete->stationPivot->nom, listePivots->tete->lastLigne, listePivots->poidsTotal);
     uint32_t count = 0;
-    while (count < graphe->nbStations)
+    while (count < graphe->nbStations && listePivots->tete->stationPivot->id != chemin->destination)
     {
-        p = listePivots->tete;
-        a = graphe->aretes[p->stationPivot->id]->tete;
-        printf("DEBUT FOR\n");
-        for (uint32_t i = 0; i < graphe->aretes[p->stationPivot->id]->taille; i++)
+        a = graphe->aretes[listePivots->tete->stationPivot->id]->tete;
+        for (uint32_t i = 0; i < graphe->aretes[listePivots->tete->stationPivot->id]->taille; i++)
         {
-            printf("== %s\n", graphe->stations[a->arete->destination]->estVisite ? "true" : "false");
+            // printf("%d,%d,%s,%d,%s\n", a->arete->origine, a->arete->destination, a->arete->ligne, listePivots->poidsTotal, graphe->stations[a->arete->destination]->estVisite ? "true" : "false");
             if (!graphe->stations[a->arete->destination]->estVisite)
             {
                 poids = MINUTE_CONNEXION;
-                if ((p->lastLigne != a->arete->ligne) || (strcmp(p->lastLigne, "DEFAULT") != 0))
+                if ((listePivots->tete->lastLigne != a->arete->ligne) && (strcmp(listePivots->tete->lastLigne, "DEFAULT") != 0))
                     poids += MINUTE_CHANGEMENT_LIGNE;
-                m = new_maillon();
-                printf("%d-%s %d-%s %d %s T=%d\n", p->stationPivot->id, p->stationPivot->nom, graphe->stations[a->arete->destination]->id, graphe->stations[a->arete->destination]->nom, poids, a->arete->ligne, listePivots->poidsTotal);
-                set_maillon(m, NULL, p->stationPivot, graphe->stations[a->arete->destination], NULL, NULL, poids, a->arete->ligne);
-                add_poidMin(stationsVoisines, m);
-                printf("(%s)%d-%s\n", stationsVoisines->tete->lastLigne, stationsVoisines->tete->stationPivot->id, stationsVoisines->tete->stationPivot->nom);
-                a = a->suivant;
-                listePivots->poidsTotal += poids;
+                if (!isin(stationsVoisines, a->arete->destination))
+                {
+                    m = new_maillon();
+                    set_maillon(m,
+                                NULL,
+                                graphe->stations[a->arete->destination],
+                                listePivots->tete->stationPivot,
+                                NULL,
+                                NULL,
+                                listePivots->poidsTotal + poids,
+                                a->arete->ligne);
+                    add_poidMin(stationsVoisines, m);
+                    printf("Ajout de %d venant de %d avec la ligne %s et un poids de %d.\n", m->stationPivot->id, m->stationAccessible->id, m->lastLigne, m->poids);
+                }
             }
+            a = a->suivant;
         }
-        printf("FIN FOR\n\n");
         r = rem_tete(stationsVoisines);
-        Maillon *temp = stationsVoisines->tete;
-        for (u_int32_t i = 0; i < 20; i++)
-        {
-            printf("%s \n", temp->stationPivot->nom);
-            temp = temp->suivant;
-        }
-
+        listePivots->poidsTotal = r->poids;
         add_tete(listePivots, r);
         listePivots->tete->stationPivot->estVisite = true;
+        Maillon *tempSV = stationsVoisines->tete;
+        printf("stationsVoisines:");
+        while (tempSV != NULL)
+        {
+            printf("(%s)[%d]%d -> ", tempSV->lastLigne, tempSV->poids, tempSV->stationPivot->id);
+            tempSV = tempSV->suivant;
+        }
+        printf("\n");
+        Maillon *tempLP = listePivots->tete;
+        printf("listePivots:");
+        while (tempLP != NULL)
+        {
+            printf("(%s)[%d]%d -> ", tempLP->lastLigne, tempLP->poids, tempLP->stationPivot->id);
+            tempLP = tempLP->suivant;
+        }
+        printf("\n\n");
         count++;
-        // printf("%s \n", listePivots->tete->stationPivot->nom);
-        printf("========== %d ==========\n\n\n", count);
     }
-    Maillon *affichage = listePivots->queue;
+    // Maillon *affichage = listePivots->queue;
     // for (uint32_t j = 0; j < listePivots->taille; j++)
     // {
     //     while (affichage->precedant != NULL)
@@ -260,11 +278,5 @@ void djikstra(char *nomFichierStations, char *nomFichierAretes)
     //         printf("(%s)%s -> ", affichage->lastLigne, affichage->stationPivot->nom);
     //     }
     // }
-    printf("\n");
-}
-
-int main()
-{
-    djikstra("../data/stationsEdited.csv", "../data/aretes.csv");
-    return EXIT_SUCCESS;
+    // printf("\n");
 }

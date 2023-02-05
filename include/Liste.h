@@ -67,4 +67,14 @@ Maillon *rem_queue(Liste *l);
 Maillon *rem_position(Liste *l,
                       uint32_t pos);
 
+/**
+ * @brief renvoie true si le maillon est dans la liste
+ * 
+ * @param l la liste a verifier
+ * @param id l'id a verifier
+ * @return true 
+ * @return false 
+ */
+bool isin(Liste *l, uint32_t id);
+
 #endif

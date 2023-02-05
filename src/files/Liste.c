@@ -39,7 +39,7 @@ void add_position(Liste *l, Maillon *m, uint32_t pos)
     else
     {
         precedant = l->tete;
-        for (uint32_t i = 0; i < pos - 1; i++)
+        for (uint32_t i = 0; i < pos; i++)
             precedant = precedant->suivant;
         suivant = precedant->suivant;
         precedant->suivant = m;
@@ -58,18 +58,27 @@ void add_poidMin(Liste *l, Maillon *m)
     {
         pos = 0;
     }
-    else{
+    else
+    {
         while (m->poids > maillon->poids && maillon->suivant != NULL)
         {
+            printf("padd = %d, pliste = %d | ", m->poids, maillon->poids);
             maillon = maillon->suivant;
             pos++;
         }
     }
+    printf("\n");
     add_position(l, m, pos);
 }
 
 Maillon *rem_tete(Liste *l)
 {
+    if (l->taille == 0)
+    {
+        printf("ERREUR: tentative de soustarction d'un element en tete d'une liste vide\n");
+        exit(EXIT_FAILURE);
+    }
+
     Maillon *maillon = l->tete;
     l->tete = l->tete->suivant;
     l->taille--;
@@ -115,5 +124,24 @@ Maillon *rem_position(Liste *l, uint32_t pos)
         suivant->precedant = precedant;
         l->taille--;
         return maillon;
+    }
+}
+
+bool isin(Liste *l, uint32_t id)
+{
+    bool isin = false;
+    if (l->taille == 0)
+    {
+        return false;
+    }
+    else
+    {
+        Maillon *maillon = l->tete;
+        while (maillon->suivant != NULL)
+        {
+            if (id == maillon->stationPivot->id)
+                return true;
+        }
+        return false;
     }
 }
