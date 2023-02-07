@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <math.h>
 
+#define BUFFERZIZE 1000
 #define SIZE_NAME_STATION 50
 #define SIZE_NAME_LIGNE 5
 #define MINUTE_CONNEXION 1

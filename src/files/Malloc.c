@@ -14,7 +14,7 @@ void *myMalloc(char *message, uint64_t size)
 
 Station *new_station()
 {
-    Station *station = (Station *)myMalloc("ERREUR: impossible de creer la station\n", sizeof(Station));
+    Station *station = (Station *)myMalloc("\033[0;31mERREUR: impossible de creer la station !\033[0m\n", sizeof(Station));
     station->id = 0;
     station->estVisite = false;
     return station;
@@ -22,7 +22,7 @@ Station *new_station()
 
 Arete *new_arete()
 {
-    Arete *arete = (Arete *)myMalloc("ERREUR: impossible de creer l'arete\n", sizeof(Arete));
+    Arete *arete = (Arete *)myMalloc("\033[0;31mERREUR: impossible de creer l'arete !\033[0m\n", sizeof(Arete));
     arete->origine = 0;
     arete->destination = 0;
     arete->poids = 0;
@@ -31,7 +31,7 @@ Arete *new_arete()
 
 Maillon *new_maillon()
 {
-    Maillon *maillon = (Maillon *)myMalloc("ERREUR: impossible de creer le maillon\n", sizeof(Maillon));
+    Maillon *maillon = (Maillon *)myMalloc("\033[0;31mERREUR: impossible de creer le maillon \033[0m\n", sizeof(Maillon));
     maillon->arete = NULL;
     maillon->stationPivot = NULL;
     maillon->stationAccessible = NULL;
@@ -43,7 +43,7 @@ Maillon *new_maillon()
 
 Liste *new_liste()
 {
-    Liste *liste = (Liste *)myMalloc("ERREUR: impossible de creer la liste\n", sizeof(Liste));
+    Liste *liste = (Liste *)myMalloc("\033[0;31mERREUR: impossible de creer la liste !\033[0m\n", sizeof(Liste));
     liste->tete = NULL;
     liste->queue = NULL;
     liste->taille = 0;
@@ -53,9 +53,9 @@ Liste *new_liste()
 
 Graphe *new_graphe(uint32_t nbStations, uint32_t nbAretes)
 {
-    Graphe *graphe = (Graphe *)myMalloc("ERREUR: impossible de creer le graphe\n", sizeof(Graphe));
-    graphe->stations = (Station **)myMalloc("ERREUR: impossible de creer les stations du graphe\n", nbStations * sizeof(Station *));
-    graphe->aretes = (Liste **)myMalloc("ERREUR: impossible de creer le tableau de liste d'aretes du graphe\n", nbStations * sizeof(Liste *));
+    Graphe *graphe = (Graphe *)myMalloc("\033[0;31mERREUR: impossible de creer le graphe !\033[0m\n", sizeof(Graphe));
+    graphe->stations = (Station **)myMalloc("\033[0;31mERREUR: impossible de creer les stations du graphe !\033[0m\n", nbStations * sizeof(Station *));
+    graphe->aretes = (Liste **)myMalloc("\033[0;31mERREUR: impossible de creer le tableau de liste d'aretes du graphe !\033[0m\n", nbStations * sizeof(Liste *));
     for (uint32_t i = 0; i < nbStations; i++)
     {
         graphe->stations[i] = new_station();
@@ -68,7 +68,7 @@ Graphe *new_graphe(uint32_t nbStations, uint32_t nbAretes)
 
 Chemin *new_chemin()
 {
-    Chemin *chemin = (Chemin *)myMalloc("ERREUR: impossible de creer le chemin\n", sizeof(Chemin));
+    Chemin *chemin = (Chemin *)myMalloc("\033[0;31mERREUR: impossible de creer le chemin !\033[0;31m\n", sizeof(Chemin));
     chemin->origine = 0;
     chemin->destination = 0;
     return chemin;

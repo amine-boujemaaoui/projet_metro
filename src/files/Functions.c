@@ -5,8 +5,8 @@
 
 TabStationsParLettres *new_tabStationsParLettres()
 {
-    TabStationsParLettres *tabStationsParLettres = (TabStationsParLettres *)myMalloc("ERREUR: impossible de creer le tableau des station pas lettre\n", sizeof(TabStationsParLettres));
-    tabStationsParLettres->tab = (Liste **)myMalloc("ERREUR: impossible de creer le tableau de liste de station du tabStationsParLettres\n", NB_LETTRE * sizeof(Liste *));
+    TabStationsParLettres *tabStationsParLettres = (TabStationsParLettres *)myMalloc("\033[0;31mERREUR: impossible de creer le tableau des station pas lettre\033[0m\n", sizeof(TabStationsParLettres));
+    tabStationsParLettres->tab = (Liste **)myMalloc("\033[0;31mERREUR: impossible de creer le tableau de liste de station du tabStationsParLettres\033[0m\n", NB_LETTRE * sizeof(Liste *));
     for (uint8_t i = 0; i < NB_LETTRE; i++)
     {
         tabStationsParLettres->tab[i] = new_liste();
@@ -38,12 +38,12 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
     uint32_t tmpInt, tmpInt2;
     if (fichierStations == NULL)
     {
-        printf("Impossible d'ouvrir le fichier %s\n", nomFichierStations);
+        printf("\033[0;31mImpossible d'ouvrir le fichier %s\n", nomFichierStations);
         exit(1);
     }
     if (nomFichierAretes == NULL)
     {
-        printf("Impossible d'ouvrir le fichier %s\n", nomFichierAretes);
+        printf("\033[0;31mImpossible d'ouvrir le fichier %s\n", nomFichierAretes);
         exit(1);
     }
     // On compte le nombre de station dans le fichier nomFichierAretes
@@ -94,52 +94,65 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
 
 void afficher_tabStations(TabStationsParLettres *tabStationsParLettres)
 {
-    printf("+--------+--------------------+\n| Lettre | Liste des stations |\n+--------+--------------------+\n");
+    printf("\033[0;32m+--------+--------------------+\033[0m\n\033[0;32m|\033[0m Lettre \033[0;32m|\033[0m Liste des stations \033[0;32m|\033[0m\n\033[0;32m+--------+--------------------+\033[0m\n");
     for (uint8_t i = 0; i < NB_LETTRE; i++)
     {
-        printf("| %c     | ", 'A' + i);
+        printf("\033[0;32m|\033[0m %c     \033[0;32m|\033[0m ", 'A' + i);
         Maillon *station = tabStationsParLettres->tab[i]->tete;
         while (station != NULL)
         {
             printf("%s, ", station->stationPivot->nom);
             station = station->suivant;
         }
-        printf("|\n");
+        printf("\033[0;32m|\033[0m\n");
     }
-    printf("+--------+--------------------+\n");
+    printf("\033[0;32m+--------+--------------------+\033[0m\n");
 }
 
 void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres, char lettre)
 {
-    printf("+-----+--------------------------------------------------+\n| ID  | Liste des stations                               |\n+-----+--------------------------------------------------+\n");
+    printf("\033[0;32m+-----+--------------------------------------------------+\033[0m\n\033[0;32m|\033[0m ID  \033[0;32m|\033[0m Liste des stations                               \033[0;32m|\033[0m\n\033[0;32m+-----+--------------------------------------------------+\033[0m\n");
     Maillon *station = tabStationsParLettres->tab[lettre - 'A']->tete;
     while (station != NULL)
     {
-        printf("| %-3d | %-48s |\n", station->stationPivot->id, station->stationPivot->nom);
+        printf("\033[0;32m|\033[0m %-3d \033[0;32m|\033[0m %-48s \033[0;32m|\033[0m\n", station->stationPivot->id, station->stationPivot->nom);
         station = station->suivant;
     }
-    printf("+-----+--------------------------------------------------+\n");
+    printf("\033[0;32m+-----+--------------------------------------------------+\033[0m\n");
 }
 
 Chemin *init_chemin(Graphe *graphe)
 {
+    char buffer[BUFFERZIZE];
     Chemin *chemin = new_chemin();
     bool departValide = false, arriverValide = false;
     char lettreOrigine, lettreDestination;
     uint32_t origine, destination;
     Maillon *maillon;
-    printf("Entrez la premiere letre de la station de depart: ");
+    printf("Entrez la premiere lettre de la station de depart: ");
     scanf(" %c", &lettreOrigine);
-    lettreOrigine = toupper(lettreOrigine);
-    while (graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0)
+    while ((lettreOrigine - 'A' > NB_LETTRE || lettreOrigine - 'A' < 0 || graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0) &&
+           (lettreOrigine - 'a' > NB_LETTRE || lettreOrigine - 'a' < 0 || graphe->tabStationsParLettres->tab[lettreOrigine - 'a']->taille == 0))
     {
-        printf("Il n'y a aucune station commencant par cette lettre!\nEntrez la premiere letre de la station de depart: ");
+        printf("\033[0;31mIl n'y a aucune station commencant par cette lettre !\033[0m\n");
+        printf("Entrez la premiere letre de la station de depart: ");
         scanf(" %c", &lettreOrigine);
-        lettreOrigine = toupper(lettreOrigine);
     }
+    lettreOrigine = toupper(lettreOrigine);
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
+    fgets(buffer, BUFFERZIZE, stdin);
     printf("Entrez l'identifiant de la station de depart: ");
     scanf(" %d", &origine);
+    fgets(buffer, BUFFERZIZE, stdin);
+    while (origine < 0 || origine > graphe->nbStations)
+    {
+        origine = 0;
+        fgets(buffer, BUFFERZIZE, stdin);
+        printf("\033[0;31mCet id n'existe pas !\033[0m\n");
+        printf("Entrez l'identifiant de la station de depart: \n");
+        scanf(" %d", &origine);
+        fgets(buffer, BUFFERZIZE, stdin);
+    }
     maillon = graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->tete;
     while (!departValide)
     {
@@ -151,29 +164,35 @@ Chemin *init_chemin(Graphe *graphe)
         }
         if (!departValide)
         {
-            printf("l'id %d n'est pas une station de cette liste!\n", origine);
-            // afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
+            printf("\033[0;31mCe n'est pas une station de cette liste !\033[0m\n");
             printf("Entrez l'identifiant de la station de depart: ");
             scanf(" %d", &origine);
+            fgets(buffer, BUFFERZIZE, stdin);
             maillon = graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->tete;
         }
     }
-    printf("Entrez la premiere letre de la station d'arriver: ");
+    printf("Entrez la premiere lettre de la station d'arriver: ");
     scanf(" %c", &lettreDestination);
-    lettreDestination = toupper(lettreDestination);
-    if (graphe->tabStationsParLettres->tab[lettreDestination - 'A']->taille == 0)
+    while ((lettreDestination - 'A' > NB_LETTRE || lettreDestination - 'A' < 0 || graphe->tabStationsParLettres->tab[lettreDestination - 'A']->taille == 0) &&
+           (lettreDestination - 'a' > NB_LETTRE || lettreDestination - 'a' < 0 || graphe->tabStationsParLettres->tab[lettreDestination - 'a']->taille == 0))
     {
-        while (graphe->tabStationsParLettres->tab[lettreDestination - 'A']->taille == 0)
-        {
-            printf("Il n'y a aucune station commencent par cette lettre!\n");
-            printf("Entrez la premiere letre de la station d'arriver: ");
-            scanf(" %c", &lettreDestination);
-            lettreDestination = toupper(lettreDestination);
-        }
+        printf("\033[0;31mIl n'y a aucune station commencant par cette lettre !\033[0m\n");
+        printf("Entrez la premiere letre de la station d'arriver: ");
+        scanf(" %c", &lettreDestination);
     }
+    lettreDestination = toupper(lettreDestination);
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
-    printf("Entrez l'identifiant de la station d'arriver: ");
+    printf("Entrez l'identifiant de la station de destination: ");
     scanf(" %d", &destination);
+    fgets(buffer, BUFFERZIZE, stdin);
+    while (destination < 0 || destination > graphe->nbStations)
+    {
+        fgets(buffer, BUFFERZIZE, stdin);
+        printf("Cet id n'existe pas %d!\n", destination);
+        printf("Entrez l'identifiant de la station de destination: ");
+        scanf(" %d", &destination);
+        fgets(buffer, BUFFERZIZE, stdin);
+    }
     maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
     while (!arriverValide)
     {
@@ -185,16 +204,39 @@ Chemin *init_chemin(Graphe *graphe)
         }
         if (!arriverValide)
         {
-            printf("l'id %d n'est pas une station de cette liste!\n", destination);
-            // afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
-            printf("Entrez l'identifiant de la station de depart: ");
+            printf("Ce n'est pas une station de cette liste!\n");
+            printf("Entrez l'identifiant de la station de destination: ");
             scanf(" %d", &destination);
+            fgets(buffer, BUFFERZIZE, stdin);
             maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
         }
     }
     chemin->origine = origine;
     chemin->destination = destination;
     return chemin;
+}
+
+void afficher_chemin(Liste *listePivots, Chemin *chemin)
+{
+    Maillon *affichage, *last;
+    affichage = listePivots->tete;
+    last = affichage;
+    affichage = affichage->suivant;
+    while (affichage != NULL)
+    {
+        if (last->stationPivot->id == chemin->origine)
+            affichage = NULL;
+        else
+        {
+            printf("\n(%d,%d)(%s)[%d]\n", last->stationAccessible->id, last->stationPivot->id, last->lastLigne, last->poids);
+            while ((affichage != NULL) && (last->stationAccessible->id != affichage->stationPivot->id))
+            {
+                affichage = affichage->suivant;
+            }
+            last = affichage;
+            affichage = listePivots->tete;
+        }
+    }
 }
 
 void djikstra(char *nomFichierStations, char *nomFichierAretes)
@@ -226,81 +268,23 @@ void djikstra(char *nomFichierStations, char *nomFichierAretes)
             {
                 poids = MINUTE_CONNEXION;
                 if ((strcmp(listePivots->tete->lastLigne, a->arete->ligne) != 0) && (strcmp(listePivots->tete->lastLigne, "DEFAULT") != 0))
-                {
                     poids += MINUTE_CHANGEMENT_LIGNE;
-                }
                 m = new_maillon();
                 set_maillon(m, NULL, graphe->stations[a->arete->destination], listePivots->tete->stationPivot, NULL, NULL, listePivots->poidsTotal + poids, a->arete->ligne);
                 add_poidMin(stationsVoisines, m);
-                // printf("+ (%d,%d)(%s)[%d]", m->stationAccessible->id, m->stationPivot->id, m->lastLigne, m->poids);
             }
             a = a->suivant;
         }
-        // Maillon *tempSV = stationsVoisines->tete;
-        // printf("\nSV:");
-        // while (tempSV != NULL)
-        // {
-        //     printf("(%d,%d)(%s)[%d] -> ", tempSV->stationAccessible->id ,tempSV->stationPivot->id, tempSV->lastLigne, tempSV->poids);
-        //     tempSV = tempSV->suivant;
-        // }
-        // Maillon *tempLP = listePivots->tete;
-        // printf("\nLP:");
-        // while (tempLP != NULL)
-        // {
-        //     printf("%d(%s)[%d] -> ",  tempLP->stationPivot->id, tempLP->lastLigne, tempLP->poids);
-        //     tempLP = tempLP->suivant;
-        // }
-        // printf("\nStation voisine a retier: %d(%s)[%d]\n", stationsVoisines->tete->stationPivot->id, stationsVoisines->tete->lastLigne, stationsVoisines->tete->poids);
         r = rem_tete(stationsVoisines);
-        // printf("Pivot deja prsent? %s\n", isin(listePivots, r->stationPivot->id) ? "true" : "false");
         while (isin(listePivots, r->stationPivot->id) && stationsVoisines->taille != 0)
         {
             free(r);
             r = rem_tete(stationsVoisines);
         }
-        // printf("maillon retirer: (%s)[%d]%d\n", r->lastLigne, r->poids, r->stationPivot->id);
         listePivots->poidsTotal = r->poids;
         add_tete(listePivots, r);
         listePivots->tete->stationPivot->estVisite = true;
         count++;
     }
-    Maillon *tempLP = listePivots->tete;
-    printf("\nLP:");
-    uint32_t sa = 0;
-    while (tempLP != NULL)
-    {
-        if (tempLP->stationAccessible == NULL)
-        {
-            sa = 0;
-        }
-        else
-        {
-            sa = tempLP->stationAccessible->id;
-        }
-
-        printf("(%d,%d)(%s)[%d] -> ", sa, tempLP->stationPivot->id, tempLP->lastLigne, tempLP->poids);
-        tempLP = tempLP->suivant;
-    }
-    Maillon *affichage, *last;
-    affichage = listePivots->tete;
-    last = affichage;
-    affichage = affichage->suivant;
-    while (affichage != NULL)
-    {
-        if (last->stationPivot->id == chemin->origine)
-        {
-            affichage = NULL;
-        }
-        else
-        {
-            printf("\n(%d,%d)(%s)[%d]\n", last->stationAccessible->id, last->stationPivot->id, last->lastLigne, last->poids);
-            while ((affichage != NULL) && (last->stationAccessible->id != affichage->stationPivot->id))
-            {
-                // printf("(%d,%d) - (%d,%d)\n", last->stationAccessible->id, last->stationPivot->id, affichage->stationAccessible->id, affichage->stationPivot->id);
-                affichage = affichage->suivant;
-            }
-            last = affichage;
-            affichage = listePivots->tete;
-        }
-    }
+    afficher_chemin(listePivots, chemin);
 }

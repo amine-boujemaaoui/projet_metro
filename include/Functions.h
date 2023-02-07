@@ -46,4 +46,13 @@ void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres,
 void djikstra(char *nomFichierStations,
               char *nomFichierAretes);
 
+
+/**
+ * @brief affiche le chemin a prendre et les lignes a utiliser
+ * 
+ * @param listePivots la liste des pivots
+ * @param chemin la destination et l'origine
+ */
+void afficher_chemin(Liste *listePivots, Chemin *chemin);
+
 #endif

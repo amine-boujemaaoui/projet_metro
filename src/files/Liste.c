@@ -29,7 +29,7 @@ void add_position(Liste *l, Maillon *m, uint32_t pos)
     Maillon *precedant, *suivant;
     if (pos > l->taille)
     {
-        printf("ERREUR: tentative d'ajout à une position en dehors de la liste\n");
+        printf("\033[0;31mERREUR: tentative d'ajout à une position en dehors de la liste !\033[0m\n");
         exit(EXIT_FAILURE);
     }
     else if (pos == 0)
@@ -62,13 +62,10 @@ void add_poidMin(Liste *l, Maillon *m)
     {
         while (maillon != NULL && m->poids > maillon->poids)
         {
-
-            // printf("%p\n", maillon->suivant);
             maillon = maillon->suivant;
             pos++;
         }
     }
-    printf("\n");
     add_position(l, m, pos);
 }
 
@@ -76,7 +73,7 @@ Maillon *rem_tete(Liste *l)
 {
     if (l->taille == 0)
     {
-        printf("ERREUR: tentative de soustarction d'un element en tete d'une liste vide\n");
+        printf("\033[0;31mERREUR: tentative de soustarction d'un element en tete d'une liste vide !\033[0m\n");
         exit(EXIT_FAILURE);
     }
 
@@ -107,7 +104,7 @@ Maillon *rem_position(Liste *l, uint32_t pos)
     Maillon *maillon, *precedant, *suivant;
     if (pos >= l->taille)
     {
-        printf("ERREUR: tentative de suppression à une position en dehors de la liste\n");
+        printf("\033[0;31mERREUR: tentative de suppression à une position en dehors de la liste !\033[0m\n");
         exit(EXIT_FAILURE);
     }
     else if (pos == 0)
