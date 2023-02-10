@@ -10,7 +10,8 @@
  * @param size la taille a alouer par le malloc
  * @return void*
  */
-void *myMalloc(char *message, uint64_t size);
+void *myMalloc(char *message,
+               uint64_t size);
 
 /**
  * @brief Fonction pour creer et allouer une station
@@ -47,14 +48,15 @@ Liste *new_liste();
  * @param nbAretes le nombre de aretes à charger
  * @return Graphe*
  */
-Graphe *new_graphe(uint32_t nbStations, uint32_t nbAretes);
+Graphe *new_graphe(uint32_t nbStations,
+                   uint32_t nbAretes);
 
 /**
- * @brief Fonction pour creer et allouer un chemain
+ * @brief Fonction pour creer et allouer un chemin
  *
- * @return Chemain*
+ * @return Chemin*
  */
-Chemain *new_chemain();
+Chemin *new_chemin();
 
 /**
  * @brief Fonction pour creer et allouer un tabStations

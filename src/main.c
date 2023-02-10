@@ -3,8 +3,16 @@
 
 int main()
 {
-    Graphe *graphe = chargerGraphe("../data/stationsEdited.csv", "../data/aretes.csv");
-    Chemain *chemain = init_chemain(graphe);
-    printf("Origine: %s\nDestination: %s\n", graphe->stations[chemain->origine]->nom, graphe->stations[chemain->destination]->nom);
+    char buffer[BUFFERZIZE], c;
+    bool end = false;
+    while (!end)
+    {
+        djikstra("../data/stationsEdited.csv", "../data/aretes.csv");
+        printf("Voulez-vous afficher un nouveau chemin \033[0;30m[y\\n]\033[0m? ");
+        scanf(" %c", &c);
+        fgets(buffer, BUFFERZIZE, stdin);
+        if (c == 'n') end = true;
+    }
+            
     return EXIT_SUCCESS;
 }
