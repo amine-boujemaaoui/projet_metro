@@ -211,6 +211,7 @@ Chemin *init_chemin(Graphe *graphe)
             maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
         }
     }
+    printf("\n");
     chemin->origine = origine;
     chemin->destination = destination;
     return chemin;
@@ -218,24 +219,43 @@ Chemin *init_chemin(Graphe *graphe)
 
 void afficher_chemin(Liste *listePivots, Chemin *chemin)
 {
-    Maillon *affichage, *last;
+    Maillon *last, *save, *affichage;
+    Liste *listeOrdonner = new_liste();
     affichage = listePivots->tete;
     last = affichage;
+    save = new_maillon();
+    set_maillon(save, last->arete, last->stationPivot, last->stationAccessible, NULL, NULL, last->poids, last->lastLigne);
+    add_tete(listeOrdonner, save);
     affichage = affichage->suivant;
-    while (affichage != NULL)
+    while (affichage != NULL && affichage->stationPivot->id)
     {
         if (last->stationPivot->id == chemin->origine)
             affichage = NULL;
         else
         {
-            printf("\n(%d,%d)(%s)[%d]\n", last->stationAccessible->id, last->stationPivot->id, last->lastLigne, last->poids);
             while ((affichage != NULL) && (last->stationAccessible->id != affichage->stationPivot->id))
-            {
                 affichage = affichage->suivant;
-            }
             last = affichage;
+            save = new_maillon();
+            set_maillon(save, last->arete, last->stationPivot, last->stationAccessible, NULL, NULL, last->poids, last->lastLigne);
+            add_tete(listeOrdonner, save);
             affichage = listePivots->tete;
         }
+    }
+    affichage = listeOrdonner->tete;
+    affichage = affichage->suivant;
+    while (affichage != NULL)
+    {
+        printf("(ligne %s)%s\n", affichage->lastLigne, affichage->stationAccessible->nom);
+        printf("      |\n      V\n");
+        affichage = affichage->suivant;
+        if (affichage->suivant == NULL)
+        {
+            printf("(ligne %s)%s\n\n", affichage->lastLigne, affichage->stationPivot->nom);
+            printf("Temps de trajet total: %d minutes\n\n", affichage->poids);
+            affichage = NULL;
+        }
+        
     }
 }
 

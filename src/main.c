@@ -3,29 +3,16 @@
 
 int main()
 {
+    char buffer[BUFFERZIZE], c;
     bool end = false;
     while (!end)
     {
-        char c;
         djikstra("../data/stationsEdited.csv", "../data/aretes.csv");
-        printf("Voulez-vous afficher un nouveau chemain [y\\n]?\n");
+        printf("Voulez-vous afficher un nouveau chemin \033[0;30m[y\\n]\033[0m? ");
         scanf(" %c", &c);
-        switch (c)
-        {
-        case 'y':
-            djikstra("../data/stationsEdited.csv", "../data/aretes.csv");
-            printf("Voulez-vous afficher un nouveau chemain \033[0;30m[y\\n]\033[0m?");
-            scanf(" %c", &c);
-            break;
-
-        case 'n':
-            end = true;
-            break;
-
-        default:
-            end = true;
-            break;
-        }
+        fgets(buffer, BUFFERZIZE, stdin);
+        if (c == 'n') end = true;
     }
+            
     return EXIT_SUCCESS;
 }
