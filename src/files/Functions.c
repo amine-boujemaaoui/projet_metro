@@ -60,7 +60,6 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
     rewind(fichierAretes);
     Graphe *graphe = new_graphe(nbStations + 1, nbAretes);
     // On charge les stations dans le graphe
-    uint32_t count = 0;
     char nom[SIZE_NAME_STATION];
     uint32_t id;
     fscanf(fichierStations, "%[^,],%[^\n]\n", tmpChar, tmpChar); // on passe l'entete du fichier
@@ -70,11 +69,9 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
         Maillon *maillon = new_maillon();
         set_maillon(maillon, NULL, graphe->stations[id], NULL, NULL, NULL, 0, "DEFAULT");
         add_queue(tabStationsParLettres->tab[nom[0] - 'A'], maillon);
-        count++;
     }
     graphe->tabStationsParLettres = tabStationsParLettres;
     // On charge les aretes dans le graphe
-    count = 0;
     fscanf(fichierAretes, "%[^,],%[^,],%[^\n]", tmpChar, tmpChar, tmpChar); // on passe l'entete du fichier
     uint32_t origine, destination;
     char ligne[SIZE_NAME_LIGNE];
@@ -85,7 +82,6 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
         Maillon *maillon = new_maillon();
         set_maillon(maillon, arete, NULL, NULL, NULL, NULL, 0, "DEFAULT");
         add_queue(graphe->aretes[origine], maillon);
-        count++;
     }
     fclose(fichierStations);
     fclose(fichierAretes);
@@ -259,9 +255,8 @@ void afficher_chemin(Liste *listePivots, Chemin *chemin)
     }
 }
 
-void djikstra(char *nomFichierStations, char *nomFichierAretes)
+void djikstra(Graphe *graphe)
 {
-    Graphe *graphe = chargerGraphe(nomFichierStations, nomFichierAretes);
     Chemin *chemin = init_chemin(graphe);
     Liste *listePivots = new_liste();
     Liste *stationsVoisines = new_liste();
@@ -295,16 +290,17 @@ void djikstra(char *nomFichierStations, char *nomFichierAretes)
             }
             a = a->suivant;
         }
-        r = rem_tete(stationsVoisines);
-        while (isin(listePivots, r->stationPivot->id) && stationsVoisines->taille != 0)
-        {
-            free(r);
-            r = rem_tete(stationsVoisines);
-        }
-        listePivots->poidsTotal = r->poids;
-        add_tete(listePivots, r);
-        listePivots->tete->stationPivot->estVisite = true;
-        count++;
+r = rem_tete(stationsVoisines);
+while (isin(listePivots, r->stationPivot->id) && stationsVoisines->taille != 0)
+{
+    free(r);
+    r = rem_tete(stationsVoisines);
+}
+listePivots->poidsTotal = r->poids;
+add_tete(listePivots, r);
+listePivots->tete->stationPivot->estVisite = true;
+count++;
     }
     afficher_chemin(listePivots, chemin);
+    set_allNonVisite(graphe);
 }

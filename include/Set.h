@@ -51,4 +51,11 @@ void set_maillon(Maillon *maillon,
                  uint32_t poids,
                  char *lastLigne);
 
+/**
+ * @brief va initialiser toute les station du graphe a non visiter
+ * 
+ * @param graphe le graphe a initialiser
+ */
+void set_allNonVisite(Graphe *graphe);
+
 #endif

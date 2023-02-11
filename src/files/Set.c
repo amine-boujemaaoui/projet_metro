@@ -25,3 +25,9 @@ void set_maillon(Maillon *maillon, Arete *arete, Station *stationPivot, Station 
     maillon->poids = poids;
     strcpy(maillon->lastLigne, lastLigne);
 }
+
+void set_allNonVisite(Graphe *graphe)
+{
+    for (uint32_t i = 0; i < graphe->nbStations; i++)
+        graphe->stations[i]->estVisite = false;
+}
