@@ -6,10 +6,10 @@
 /**
  * @brief Fonction pour affecter les variables à une station
  *
- * @param station la station à initialiser
- * @param id l'id à affecter à la station
- * @param nom le nom a affecter a la station
- * @param estVisite definit si la station est visite
+ * @param station La station à initialiser
+ * @param id L'id à affecter à la station
+ * @param nom Le nom a affecté à la station
+ * @param estVisite Définis si la station est visitée
  */
 void set_station(Station *station,
                  uint32_t id,
@@ -17,13 +17,13 @@ void set_station(Station *station,
                  bool estVisite);
 
 /**
- * @brief Fonction pour affecter les variables à une arete
+ * @brief Fonction pour affecter les variables à une arête
  *
- * @param arete l'arrete à initialiser
- * @param origine l'origine à affecter à l'arete
- * @param destination la destination à affecter à l'arete
- * @param poids le poids à affecter à l'arete
- * @param ligne la ligne à affecter à l'arete
+ * @param arete L'arête à initialiser
+ * @param origine L'origine à affecter à l'arête
+ * @param destination La destination à affecter à l'arête
+ * @param poids Le poids à affecter à l'arête
+ * @param ligne La ligne à affecter à l'arête
  */
 void set_arete(Arete *arete,
                uint32_t origine,
@@ -34,14 +34,14 @@ void set_arete(Arete *arete,
 /**
  * @brief Fonction pour affecter les variables à maillon
  *
- * @param maillon le maillon initialiser
- * @param arete l'arete à affecter au maillon
- * @param stationPivot la stationpivot|station à affecter au maillon
- * @param stationAccessible la stationAccessible à affecter au maillon
- * @param suivant le maillon suivant dans la liste ou est present le maillon
- * @param precedant le maillon precedant dans la liste ou est present le maillon
- * @param poids le poids pour arriver a cette station
- * @param lastLigne le poids pour arriver a cette station
+ * @param maillon Le maillon initialisé
+ * @param arete L'arête à affecter au maillon
+ * @param stationPivot La stationPivot/station à affecter au maillon
+ * @param stationAccessible La stationAccessible à affecter au maillon
+ * @param suivant Le maillon suivant dans la liste ou est présent le maillon
+ * @param precedant Le maillon précédant dans la liste ou est présent le maillon
+ * @param poids Le poids pour arriver a cette station
+ * @param lastLigne Le poids pour arriver a cette station
  */
 void set_maillon(Maillon *maillon,
                  Arete *arete, Station *stationPivot,
@@ -52,9 +52,9 @@ void set_maillon(Maillon *maillon,
                  char *lastLigne);
 
 /**
- * @brief va initialiser toute les station du graphe a non visiter
- * 
- * @param graphe le graphe a initialiser
+ * @brief Va initialiser toutes les stations du graphe à non visiter.
+ *
+ * @param graphe Le graphe a initialisé
  */
 void set_allNonVisite(Graphe *graphe);
 

@@ -5,8 +5,8 @@
 
 TabStationsParLettres *new_tabStationsParLettres()
 {
-    TabStationsParLettres *tabStationsParLettres = (TabStationsParLettres *)myMalloc("\033[0;31mERREUR: impossible de creer le tableau des station pas lettre\033[0m\n", sizeof(TabStationsParLettres));
-    tabStationsParLettres->tab = (Liste **)myMalloc("\033[0;31mERREUR: impossible de creer le tableau de liste de station du tabStationsParLettres\033[0m\n", NB_LETTRE * sizeof(Liste *));
+    TabStationsParLettres *tabStationsParLettres = (TabStationsParLettres *)myMalloc("\033[0;31mERREUR : impossible de créer le tableau des stations pas lettre !\033[0m\n", sizeof(TabStationsParLettres));
+    tabStationsParLettres->tab = (Liste **)myMalloc("\033[0;31mERREUR : impossible de créer le tableau de liste de stations du tabStationsParLettres !\033[0m\n", NB_LETTRE * sizeof(Liste *));
     for (uint8_t i = 0; i < NB_LETTRE; i++)
     {
         tabStationsParLettres->tab[i] = new_liste();
@@ -38,21 +38,21 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
     uint32_t tmpInt, tmpInt2;
     if (fichierStations == NULL)
     {
-        printf("\033[0;31mImpossible d'ouvrir le fichier %s\n", nomFichierStations);
+        printf("\033[0;31mERREUR : impossible d'ouvrir le fichier %s !\033[0m\n", nomFichierStations);
         exit(1);
     }
     if (nomFichierAretes == NULL)
     {
-        printf("\033[0;31mImpossible d'ouvrir le fichier %s\n", nomFichierAretes);
+        printf("\033[0;31mERREUR : impossible d'ouvrir le fichier %s !\033[0m\n", nomFichierAretes);
         exit(1);
     }
-    // On compte le nombre de station dans le fichier nomFichierAretes
+    // On compte le nombre de stations dans le fichier nomFichierAretes
     uint32_t nbStations = 0;
     fscanf(fichierStations, "%[^,],%[^\n]", tmpChar, tmpChar); // on passe l'entete du fichier
     while (fscanf(fichierStations, "%[^,],%d\n", tmpChar, &tmpInt) != EOF)
         nbStations++;
     rewind(fichierStations);
-    // On compte le nombre d'arrete dans le fichier nomFichierAretes
+    // On compte le nombre d'arêtes dans le fichier nomFichierAretes
     uint32_t nbAretes = 0;
     fscanf(fichierAretes, "%[^,],%[^,],%[^\n]", tmpChar, tmpChar, tmpChar); // on passe l'entete du fichier
     while (fscanf(fichierAretes, "%d,%d,%[^\n]", &tmpInt, &tmpInt2, tmpChar) != EOF)
@@ -62,7 +62,7 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
     // On charge les stations dans le graphe
     char nom[SIZE_NAME_STATION];
     uint32_t id;
-    fscanf(fichierStations, "%[^,],%[^\n]\n", tmpChar, tmpChar); // on passe l'entete du fichier
+    fscanf(fichierStations, "%[^,],%[^\n]\n", tmpChar, tmpChar); // On passe l'entête du fichier
     while (fscanf(fichierStations, "%[^,],%d\n", nom, &id) != EOF)
     {
         set_station(graphe->stations[id], id, nom, false);
@@ -72,7 +72,7 @@ Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes)
     }
     graphe->tabStationsParLettres = tabStationsParLettres;
     // On charge les aretes dans le graphe
-    fscanf(fichierAretes, "%[^,],%[^,],%[^\n]", tmpChar, tmpChar, tmpChar); // on passe l'entete du fichier
+    fscanf(fichierAretes, "%[^,],%[^,],%[^\n]", tmpChar, tmpChar, tmpChar); // On passe l'entête du fichier
     uint32_t origine, destination;
     char ligne[SIZE_NAME_LIGNE];
     while (fscanf(fichierAretes, "%d,%d,%[^\n]", &origine, &destination, ligne) != EOF)
@@ -125,27 +125,27 @@ Chemin *init_chemin(Graphe *graphe)
     char lettreOrigine, lettreDestination;
     uint32_t origine, destination;
     Maillon *maillon;
-    printf("Entrez la premiere lettre de la station de depart: ");
+    printf("Entrez la première lettre de la station de départ : ");
     scanf(" %c", &lettreOrigine);
     while ((lettreOrigine - 'A' > NB_LETTRE || lettreOrigine - 'A' < 0 || graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0) &&
            (lettreOrigine - 'a' > NB_LETTRE || lettreOrigine - 'a' < 0 || graphe->tabStationsParLettres->tab[lettreOrigine - 'a']->taille == 0))
     {
-        printf("\033[0;31mIl n'y a aucune station commencant par cette lettre !\033[0m\n");
-        printf("Entrez la premiere letre de la station de depart: ");
+        printf("\033[0;31mIl n'y a aucune station commençant par cette lettre !\033[0m\n");
+        printf("Entrez la première lettre de la station de départ : ");
         scanf(" %c", &lettreOrigine);
     }
     lettreOrigine = toupper(lettreOrigine);
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
     fgets(buffer, BUFFERZIZE, stdin);
-    printf("Entrez l'identifiant de la station de depart: ");
+    printf("Entrez l'identifiant de la station de départ : ");
     scanf(" %d", &origine);
     fgets(buffer, BUFFERZIZE, stdin);
     while (origine < 0 || origine > graphe->nbStations)
     {
         origine = 0;
         fgets(buffer, BUFFERZIZE, stdin);
-        printf("\033[0;31mCet id n'existe pas !\033[0m\n");
-        printf("Entrez l'identifiant de la station de depart: \n");
+        printf("\033[0;31mCet identifiant n'existe pas !\033[0m\n");
+        printf("Entrez l'identifiant de la station de départ : ");
         scanf(" %d", &origine);
         fgets(buffer, BUFFERZIZE, stdin);
     }
@@ -161,31 +161,31 @@ Chemin *init_chemin(Graphe *graphe)
         if (!departValide)
         {
             printf("\033[0;31mCe n'est pas une station de cette liste !\033[0m\n");
-            printf("Entrez l'identifiant de la station de depart: ");
+            printf("Entrez l'identifiant de la station de départ : ");
             scanf(" %d", &origine);
             fgets(buffer, BUFFERZIZE, stdin);
             maillon = graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->tete;
         }
     }
-    printf("Entrez la premiere lettre de la station d'arriver: ");
+    printf("Entrez la première lettre de la station d'arriver : ");
     scanf(" %c", &lettreDestination);
     while ((lettreDestination - 'A' > NB_LETTRE || lettreDestination - 'A' < 0 || graphe->tabStationsParLettres->tab[lettreDestination - 'A']->taille == 0) &&
            (lettreDestination - 'a' > NB_LETTRE || lettreDestination - 'a' < 0 || graphe->tabStationsParLettres->tab[lettreDestination - 'a']->taille == 0))
     {
-        printf("\033[0;31mIl n'y a aucune station commencant par cette lettre !\033[0m\n");
-        printf("Entrez la premiere letre de la station d'arriver: ");
+        printf("\033[0;31mIl n'y a aucune station commençant par cette lettre !\033[0m\n");
+        printf("Entrez la première lettre de la station d'arriver : ");
         scanf(" %c", &lettreDestination);
     }
     lettreDestination = toupper(lettreDestination);
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
-    printf("Entrez l'identifiant de la station de destination: ");
+    printf("Entrez l'identifiant de la station de destination : ");
     scanf(" %d", &destination);
     fgets(buffer, BUFFERZIZE, stdin);
     while (destination < 0 || destination > graphe->nbStations)
     {
         fgets(buffer, BUFFERZIZE, stdin);
-        printf("Cet id n'existe pas %d!\n", destination);
-        printf("Entrez l'identifiant de la station de destination: ");
+        printf("\033[0;31mCet identifiant n'existe pas !\033[0m\n");
+        printf("Entrez l'identifiant de la station de destination : ");
         scanf(" %d", &destination);
         fgets(buffer, BUFFERZIZE, stdin);
     }
@@ -200,8 +200,8 @@ Chemin *init_chemin(Graphe *graphe)
         }
         if (!arriverValide)
         {
-            printf("Ce n'est pas une station de cette liste!\n");
-            printf("Entrez l'identifiant de la station de destination: ");
+            printf("\033[0;31mCe n'est pas une station de cette liste !\033[0m\n");
+            printf("Entrez l'identifiant de la station de destination :");
             scanf(" %d", &destination);
             fgets(buffer, BUFFERZIZE, stdin);
             maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
@@ -248,14 +248,14 @@ void afficher_chemin(Liste *listePivots, Chemin *chemin)
         if (affichage->suivant == NULL)
         {
             printf("(ligne %s)%s\n\n", affichage->lastLigne, affichage->stationPivot->nom);
-            printf("Temps de trajet total: %d minutes\n\n", affichage->poids);
+            printf("Temps de trajet total : %d minutes\n\n", affichage->poids);
             affichage = NULL;
         }
         
     }
 }
 
-void djikstra(Graphe *graphe)
+void dijkstra(Graphe *graphe)
 {
     Chemin *chemin = init_chemin(graphe);
     Liste *listePivots = new_liste();

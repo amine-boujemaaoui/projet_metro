@@ -43,7 +43,7 @@ typedef struct arete
 } Arete;
 
 /**
- * @brief Structure qui represente un element de la liste doublement chaine
+ * @brief Structure qui représente un élément de la liste doublement chaîné
  *
  */
 typedef struct maillon
@@ -51,26 +51,26 @@ typedef struct maillon
     Arete *arete;
     Station *stationPivot;
     Station *stationAccessible;
-    struct maillon *suivant;   // pour ce deplacer en avant dans la liste
-    struct maillon *precedant; // pour ce deplacer en arriere dans la liste
-    uint32_t poids;            // le poids pour ce deplacer de la station pivot a la station accessible
+    struct maillon *suivant;   // Pour se déplacer en avant dans la liste
+    struct maillon *precedant; // Pour se déplacer en arrière dans la liste
+    uint32_t poids;            // Le poids pour se déplacer de la station pivot a la station accessible.
     char lastLigne[SIZE_NAME_LIGNE];
 } Maillon;
 
 /**
- * @brief Structure de la file neccesaire à l'algorithme
+ * @brief Structure de la file nécessaire à l'algorithme
  *
  */
 typedef struct liste
 {
     uint32_t taille;
-    uint32_t poidsTotal; // durré total du chemin trouver
+    uint32_t poidsTotal; // Durée totale du chemin trouvé
     Maillon *tete;
     Maillon *queue;
 } Liste;
 
 /**
- * @brief Structure pour enregistrer une requete de l'utilisateur
+ * @brief Structure pour enregistrer une requête de l'utilisateur
  *
  */
 typedef struct chemin
@@ -98,7 +98,7 @@ typedef struct graphe
     Liste **aretes;
     uint32_t nbStations;
     uint32_t nbAretes;
-    TabStationsParLettres *tabStationsParLettres; // On garde le tableau des
+    TabStationsParLettres *tabStationsParLettres;
 } Graphe;
 
 #endif
