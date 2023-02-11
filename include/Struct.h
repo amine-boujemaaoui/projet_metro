@@ -7,10 +7,12 @@
 #include <string.h>
 #include <locale.h>
 #include <assert.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <wchar.h>
 #include <ctype.h>
 #include <math.h>
+#include <time.h>
 
 #define BUFFERZIZE 1000
 #define SIZE_NAME_STATION 50
