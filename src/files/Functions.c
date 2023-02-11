@@ -242,12 +242,12 @@ void afficher_chemin(Liste *listePivots, Chemin *chemin)
     affichage = affichage->suivant;
     while (affichage != NULL)
     {
-        printf("(ligne %s)%s\n", affichage->lastLigne, affichage->stationAccessible->nom);
-        printf("      |\n      V\n");
+        printf("%s\n",  affichage->stationAccessible->nom);
+        printf("      | (ligne %s)\n      V\n", affichage->lastLigne);
         affichage = affichage->suivant;
         if (affichage->suivant == NULL)
         {
-            printf("(ligne %s)%s\n\n", affichage->lastLigne, affichage->stationPivot->nom);
+            printf("%s\n      | (ligne %s)\n      V\n%s\n\n", affichage->stationAccessible->nom, affichage->lastLigne, affichage->stationPivot->nom);
             printf("Temps de trajet total : %d minutes\n\n", affichage->poids);
             affichage = NULL;
         }

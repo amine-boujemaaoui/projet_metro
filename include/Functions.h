@@ -30,7 +30,7 @@ void afficher_tabStations(TabStationsParLettres *tabStationsParLettres);
  * @brief Fonction pour afficher le tableau des stations par lettre pour une lettre choisi
  *
  * @param tabStationsParLettres Le tableau des stations par lettre à afficher
- * @param lettre la lettre choisi
+ * @param lettre La lettre choisie
  */
 void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres,
                                    char lettre);
