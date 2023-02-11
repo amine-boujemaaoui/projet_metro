@@ -4,8 +4,9 @@ int main()
 {
     double time_spent = 0.0;
     clock_t begin = clock();
- 
-    djikstra("data/stationsEdited.csv", "data/aretes.csv");
+
+    Graphe *graphe = chargerGraphe("../data/stationsEdited.csv", "../data/aretes.csv");
+    djikstra(graphe);
 
     clock_t end = clock();
     time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
