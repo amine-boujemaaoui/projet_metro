@@ -13,13 +13,11 @@ Chemin *init_chemin(Graphe *graphe);
 
 /**
  * @brief Fonction pour lire les données des stations à partir d'un fichier
- *
  * @param nomFichierStations le fichier ou sont les stations
  * @param nomFichierAretes le fichier ou sont les aretes
  * @return Graphe*
  */
-Graphe *chargerGraphe(char *nomFichierStations,
-                      char *nomFichierAretes);
+Graphe *chargerGraphe(char *nomFichierStations, char *nomFichierAretes);
 
 /**
  * @brief Fonction pour afficher le tableau des station par lettre
@@ -43,9 +41,7 @@ void afficher_tabStationsParLettre(TabStationsParLettres *tabStationsParLettres,
  * @param nomFichierStations le fichier ou sont les stations qui font office de sommet
  * @param nomFichierAretes le fichier ou sont les aretes
  */
-void djikstra(char *nomFichierStations,
-              char *nomFichierAretes);
-
+void djikstra(Graphe *graphe);
 
 /**
  * @brief affiche le chemin a prendre et les lignes a utiliser

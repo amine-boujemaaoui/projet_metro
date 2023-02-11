@@ -9,8 +9,7 @@
  * @param l la liste à laquel on ajoute un maillon
  * @param m le maillon que l'on ajoute en tete de la liste
  */
-void add_tete(Liste *l,
-              Maillon *m);
+void add_tete(Liste *l, Maillon *m);
 
 /**
  * @brief Fonction pour ajouter le maillon m en queue de la liste l
