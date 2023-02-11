@@ -247,7 +247,7 @@ void afficher_chemin(Liste *listePivots, Chemin *chemin)
         affichage = affichage->suivant;
         if (affichage->suivant == NULL)
         {
-            printf("%s      | (ligne %s)\n      V\n%s\n\n",affichage->stationAccessible->nom, affichage->lastLigne, affichage->stationPivot->nom);
+            printf("%s\n      | (ligne %s)\n      V\n%s\n\n",affichage->stationAccessible->nom, affichage->lastLigne, affichage->stationPivot->nom);
             printf("Temps de trajet total: %d minutes\n\n", affichage->poids);
             affichage = NULL;
         }
