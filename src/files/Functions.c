@@ -218,51 +218,8 @@ Chemin *init_chemin(Graphe *graphe)
     return chemin;
 }
 
-// void afficher_chemin(Liste *listePivots, Chemin *chemin)
-// {
-//     Maillon *last, *save, *affichage;
-//     Liste *listeOrdonner = new_liste();
-//     affichage = listePivots->tete;
-//     last = affichage;
-//     save = new_maillon();
-//     set_maillon(save, last->arete, last->stationPivot, last->stationAccessible, NULL, NULL, last->poids, last->lastLigne);
-//     add_tete(listeOrdonner, save);
-//     affichage = affichage->suivant;
-//     while (affichage != NULL && affichage->stationPivot->id)
-//     {
-//         if (last->stationPivot->id == chemin->origine)
-//             affichage = NULL;
-//         else
-//         {
-//             while ((affichage != NULL) && (last->stationAccessible->id != affichage->stationPivot->id))
-//                 affichage = affichage->suivant;
-//             last = affichage;
-//             save = new_maillon();
-//             set_maillon(save, last->arete, last->stationPivot, last->stationAccessible, NULL, NULL, last->poids, last->lastLigne);
-//             add_tete(listeOrdonner, save);
-//             affichage = listePivots->tete;
-//         }
-//     }
-//     affichage = listeOrdonner->tete;
-//     affichage = affichage->suivant;
-//     while (affichage != NULL)
-//     {
-//         printf("%s\n",  affichage->stationAccessible->nom);
-//         printf("      | (ligne %s)\n      V\n", affichage->lastLigne);
-//         affichage = affichage->suivant;
-//         if (affichage->suivant == NULL)
-//         {
-//             printf("%s\n      | (ligne %s)\n      V\n%s\n\n", affichage->stationAccessible->nom, affichage->lastLigne, affichage->stationPivot->nom);
-//             printf("Temps de trajet total : %d minutes\n\n", affichage->poids);
-//             affichage = NULL;
-//         }
-
-//     }
-// }
-
 void afficher_chemin(Liste *listePivots, Chemin *chemin)
 {
-    int d;
     Maillon *last, *save, *affichage;
     Liste *listeOrdonner = new_liste();
     affichage = listePivots->tete;
@@ -311,8 +268,8 @@ void afficher_chemin(Liste *listePivots, Chemin *chemin)
             affichage = NULL;
         }
     }
-    printf("\033[0;30mAppuyer sur une touche pour revenir au menu ... \033[0m");
-    scanf(" %d", &d);
+    printf("\033[0;30mAppuyer sur entrer pour revenir au menu ... \033[0m");
+    getchar();
 }
 
 void dijkstra(Graphe *graphe)
@@ -377,12 +334,12 @@ void menu()
         {
             printf("\033[H\033[2J");
             printf("\033[0;32m");
-            printf("\n                  :0Kd;,,;oOko.       .lOx,    .;;;:d0Kkc;;;,. .xKkc,,,cxOx;    ");
-            printf("\n                 .kMNc    ;KMNl     .:xXMM0;       .xMWd       cNMk.   .xWMk.   ");
-            printf("\n                 ;KM0c;cccokd:.    ;o:.:kKMK:      ,0MX;      .xWWk;,,;okOo'    ");
-            printf("\n                 lWWd'c0WXd.     'oxl,,;:dXMK:     lNMO.      ,KMK:......       ");
-            printf("\n                .dX0;  .oKKx,  .:l'.  .. .;OXO;   .dXKl       :KXd.             ");
-            printf("\n                 ...     ....   .          ....    ...        ....              ");
+            printf("\n  :0Kd;,,;oOko.       .lOx,    .;;;:d0Kkc;;;,. .xKkc,,,cxOx;    ");
+            printf("\n .kMNc    ;KMNl     .:xXMM0;       .xMWd       cNMk.   .xWMk.   ");
+            printf("\n ;KM0c;cccokd:.    ;o:.:kKMK:      ,0MX;      .xWWk;,,;okOo'    ");
+            printf("\n lWWd'c0WXd.     'oxl,,;:dXMK:     lNMO.      ,KMK:......       ");
+            printf("\n.dX0;  .oKKx,  .:l'.  .. .;OXO;   .dXKl       :KXd.             ");
+            printf("\n ...     ....   .          ....    ...        ....              ");
             printf("\n\n\033[0m");
             printf("\033[1;36mMenu : \033[0m\n\033[0;36m");
             printf(" - 1 Afficher un nouveau chemin\n");
