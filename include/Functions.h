@@ -49,4 +49,10 @@ void dijkstra(Graphe *graphe);
  */
 void afficher_chemin(Liste *listePivots, Chemin *chemin);
 
+/**
+ * @brief Fonction principale qui gere le deroulement du programe
+ * 
+ */
+void menu();
+
 #endif

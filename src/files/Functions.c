@@ -125,6 +125,7 @@ Chemin *init_chemin(Graphe *graphe)
     char lettreOrigine, lettreDestination;
     uint32_t origine, destination;
     Maillon *maillon;
+    printf("\033[H\033[2J");
     printf("Entrez la première lettre de la station de départ : ");
     scanf(" %c", &lettreOrigine);
     while ((lettreOrigine - 'A' > NB_LETTRE || lettreOrigine - 'A' < 0 || graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->taille == 0) &&
@@ -134,6 +135,7 @@ Chemin *init_chemin(Graphe *graphe)
         printf("Entrez la première lettre de la station de départ : ");
         scanf(" %c", &lettreOrigine);
     }
+    printf("\033[H\033[2J");
     lettreOrigine = toupper(lettreOrigine);
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreOrigine);
     fgets(buffer, BUFFERZIZE, stdin);
@@ -167,6 +169,7 @@ Chemin *init_chemin(Graphe *graphe)
             maillon = graphe->tabStationsParLettres->tab[lettreOrigine - 'A']->tete;
         }
     }
+    printf("\033[H\033[2J");
     printf("Entrez la première lettre de la station d'arriver : ");
     scanf(" %c", &lettreDestination);
     while ((lettreDestination - 'A' > NB_LETTRE || lettreDestination - 'A' < 0 || graphe->tabStationsParLettres->tab[lettreDestination - 'A']->taille == 0) &&
@@ -176,6 +179,7 @@ Chemin *init_chemin(Graphe *graphe)
         printf("Entrez la première lettre de la station d'arriver : ");
         scanf(" %c", &lettreDestination);
     }
+    printf("\033[H\033[2J");
     lettreDestination = toupper(lettreDestination);
     afficher_tabStationsParLettre(graphe->tabStationsParLettres, lettreDestination);
     printf("Entrez l'identifiant de la station de destination : ");
@@ -207,14 +211,58 @@ Chemin *init_chemin(Graphe *graphe)
             maillon = graphe->tabStationsParLettres->tab[lettreDestination - 'A']->tete;
         }
     }
+    printf("\033[H\033[2J");
     printf("\n");
     chemin->origine = origine;
     chemin->destination = destination;
     return chemin;
 }
 
+// void afficher_chemin(Liste *listePivots, Chemin *chemin)
+// {
+//     Maillon *last, *save, *affichage;
+//     Liste *listeOrdonner = new_liste();
+//     affichage = listePivots->tete;
+//     last = affichage;
+//     save = new_maillon();
+//     set_maillon(save, last->arete, last->stationPivot, last->stationAccessible, NULL, NULL, last->poids, last->lastLigne);
+//     add_tete(listeOrdonner, save);
+//     affichage = affichage->suivant;
+//     while (affichage != NULL && affichage->stationPivot->id)
+//     {
+//         if (last->stationPivot->id == chemin->origine)
+//             affichage = NULL;
+//         else
+//         {
+//             while ((affichage != NULL) && (last->stationAccessible->id != affichage->stationPivot->id))
+//                 affichage = affichage->suivant;
+//             last = affichage;
+//             save = new_maillon();
+//             set_maillon(save, last->arete, last->stationPivot, last->stationAccessible, NULL, NULL, last->poids, last->lastLigne);
+//             add_tete(listeOrdonner, save);
+//             affichage = listePivots->tete;
+//         }
+//     }
+//     affichage = listeOrdonner->tete;
+//     affichage = affichage->suivant;
+//     while (affichage != NULL)
+//     {
+//         printf("%s\n",  affichage->stationAccessible->nom);
+//         printf("      | (ligne %s)\n      V\n", affichage->lastLigne);
+//         affichage = affichage->suivant;
+//         if (affichage->suivant == NULL)
+//         {
+//             printf("%s\n      | (ligne %s)\n      V\n%s\n\n", affichage->stationAccessible->nom, affichage->lastLigne, affichage->stationPivot->nom);
+//             printf("Temps de trajet total : %d minutes\n\n", affichage->poids);
+//             affichage = NULL;
+//         }
+
+//     }
+// }
+
 void afficher_chemin(Liste *listePivots, Chemin *chemin)
 {
+    int d;
     Maillon *last, *save, *affichage;
     Liste *listeOrdonner = new_liste();
     affichage = listePivots->tete;
@@ -240,19 +288,31 @@ void afficher_chemin(Liste *listePivots, Chemin *chemin)
     }
     affichage = listeOrdonner->tete;
     affichage = affichage->suivant;
+    printf("\033[1;32m|%-3d %s : ligne %s\n", affichage->stationAccessible->id, affichage->stationAccessible->nom, affichage->lastLigne);
+    affichage = affichage->suivant;
     while (affichage != NULL)
     {
-        printf("%s\n",  affichage->stationAccessible->nom);
-        printf("      | (ligne %s)\n      V\n", affichage->lastLigne);
+        if (strcmp(affichage->suivant->lastLigne, affichage->lastLigne) != 0)
+        {
+            printf("\033[1;31mChangement de ligne !\033[0m\n");
+            printf("\033[1;32m|%-3d %s : ligne %s\n", affichage->precedant->stationAccessible->id, affichage->precedant->stationAccessible->nom, affichage->suivant->lastLigne);
+            printf("    \033[0;32m|%-3d %s\033[0m\n", affichage->stationAccessible->id, affichage->stationAccessible->nom);
+        }
+        else
+            printf("    \033[0;32m|%-3d %s\033[0m\n", affichage->stationAccessible->id, affichage->stationAccessible->nom);
+
         affichage = affichage->suivant;
         if (affichage->suivant == NULL)
         {
-            printf("%s\n      | (ligne %s)\n      V\n%s\n\n", affichage->stationAccessible->nom, affichage->lastLigne, affichage->stationPivot->nom);
-            printf("Temps de trajet total : %d minutes\n\n", affichage->poids);
+            // printf("%s\n      | (ligne %s)\n      V\n%s\n\n", affichage->stationAccessible->nom, affichage->lastLigne, affichage->stationPivot->nom);
+            printf("    \033[0;32m|%-3d %s\033[0m\n", affichage->stationAccessible->id, affichage->stationAccessible->nom);
+            printf("    \033[0;32m|%-3d %s\033[0m\n", affichage->stationPivot->id, affichage->stationPivot->nom);
+            printf("\033[0;35mTemps de trajet total : \033[1;35m%d \033[0;35mminutes\033[0m\n\n", affichage->poids);
             affichage = NULL;
         }
-        
     }
+    printf("\033[0;30mAppuyer sur une touche pour revenir au menu ... \033[0m");
+    scanf(" %d", &d);
 }
 
 void dijkstra(Graphe *graphe)
@@ -290,17 +350,53 @@ void dijkstra(Graphe *graphe)
             }
             a = a->suivant;
         }
-r = rem_tete(stationsVoisines);
-while (isin(listePivots, r->stationPivot->id) && stationsVoisines->taille != 0)
-{
-    free(r);
-    r = rem_tete(stationsVoisines);
-}
-listePivots->poidsTotal = r->poids;
-add_tete(listePivots, r);
-listePivots->tete->stationPivot->estVisite = true;
-count++;
+        r = rem_tete(stationsVoisines);
+        while (isin(listePivots, r->stationPivot->id) && stationsVoisines->taille != 0)
+        {
+            free(r);
+            r = rem_tete(stationsVoisines);
+        }
+        listePivots->poidsTotal = r->poids;
+        add_tete(listePivots, r);
+        listePivots->tete->stationPivot->estVisite = true;
+        count++;
     }
     afficher_chemin(listePivots, chemin);
     set_allNonVisite(graphe);
+}
+
+void menu()
+{
+    char buffer[BUFFERZIZE];
+    int d = 0;
+    bool end = false;
+    Graphe *graphe = chargerGraphe(STATIONS, ARETES);
+    while (!end)
+    {
+        if (d == 0)
+        {
+            printf("\033[H\033[2J");
+            printf("\033[0;32m");
+            printf("\n                  :0Kd;,,;oOko.       .lOx,    .;;;:d0Kkc;;;,. .xKkc,,,cxOx;    ");
+            printf("\n                 .kMNc    ;KMNl     .:xXMM0;       .xMWd       cNMk.   .xWMk.   ");
+            printf("\n                 ;KM0c;cccokd:.    ;o:.:kKMK:      ,0MX;      .xWWk;,,;okOo'    ");
+            printf("\n                 lWWd'c0WXd.     'oxl,,;:dXMK:     lNMO.      ,KMK:......       ");
+            printf("\n                .dX0;  .oKKx,  .:l'.  .. .;OXO;   .dXKl       :KXd.             ");
+            printf("\n                 ...     ....   .          ....    ...        ....              ");
+            printf("\n\n\033[0m");
+            printf("\033[1;36mMenu : \033[0m\n\033[0;36m");
+            printf(" - 1 Afficher un nouveau chemin\n");
+            printf(" - 2 Quitter l'application\n");
+            printf("\n\033[0mSelectionnez une option \033[0;30m[1\\2]\033[0m : ");
+            scanf(" %d", &d);
+            fgets(buffer, BUFFERZIZE, stdin);
+        }
+        if (d == 2)
+            end = true;
+        if (d == 1)
+        {
+            dijkstra(graphe);
+            d = 0;
+        }   
+    }
 }
