@@ -347,7 +347,7 @@ void menu()
             printf("\n\033[0mSelectionnez une option \033[0;30m[1\\2]\033[0m : ");
             scanf(" %d", &d);
             fgets(buffer, BUFFERZIZE, stdin);
-        }
+        } 
         if (d == 2)
             end = true;
         if (d == 1)

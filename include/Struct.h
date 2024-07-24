@@ -21,8 +21,8 @@
 #define MINUTE_CHANGEMENT_LIGNE 5
 #define NB_LETTRE 26
 
-#define STATIONS "../data/stationsEdited.csv"
-#define ARETES "../data/aretes.csv"
+#define STATIONS "data/stationsEdited.csv"
+#define ARETES "data/aretes.csv"
 
 /**
  * @brief Structure pour stocker les données des stations
